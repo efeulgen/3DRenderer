@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 #include "Mesh.h"
 #include "Camera.h"
+#include "Light.h"
 
 class Engine
 {
@@ -21,6 +22,7 @@ private:
       // scene objects
       std::vector<Mesh *> meshes;
       std::vector<Camera *> cameras;
+      std::vector<Light *> lights;
       Camera *activeCamera = nullptr;
 
 public:

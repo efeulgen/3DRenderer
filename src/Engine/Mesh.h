@@ -3,16 +3,19 @@
 #define MESH_H
 
 #include <iostream>
+#include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
+#include "Light.h"
 
 #define numVAOs 1
 #define numVBOs 1
 #define numEBOs 1
+#define numNBOs 1
 
 struct Transform
 {
@@ -28,9 +31,12 @@ private:
       GLuint vao[numVAOs];
       GLuint vbo[numVBOs];
       GLuint ebo[numEBOs];
+      GLuint nbo[numNBOs];
 
       GLuint uniformModelMatLocation;
       GLuint uniformProjectionMatLocation;
+      GLuint uniformLightPosLocation;
+      GLuint uniformLightColorLocation;
 
       GLfloat *vertices = nullptr;
       unsigned int *indices = nullptr;
@@ -45,7 +51,7 @@ public:
       void SetBuffers();
       void SetShader();
       void UpdateMesh();
-      void RenderMesh(glm::mat4 projMat);
+      void RenderMesh(glm::mat4 projMat, std::vector<Light *> lights);
       void DestroyMesh();
 
       // getters & setters

@@ -74,6 +74,9 @@ void Engine::SetupSceneObjects()
             mesh->SetBuffers();
             mesh->SetShader();
       }
+
+      // lights
+      lights.push_back(new Light());
 }
 
 void Engine::ProcessInput()
@@ -101,7 +104,7 @@ void Engine::Render()
       // render objects
       for (auto mesh : meshes)
       {
-            mesh->RenderMesh(activeCamera->GetProjectionMatrix());
+            mesh->RenderMesh(activeCamera->GetProjectionMatrix(), lights);
       }
 
       glfwSwapBuffers(window);

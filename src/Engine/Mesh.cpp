@@ -77,30 +77,46 @@ void Mesh::SetBuffers()
           22, 23, 21};
 
       GLfloat cubeVertices[] = {
-          -0.5, 0.5, -0.5,
-          0.5, 0.5, -0.5,
-          -0.5, 0.5, 0.5,
-          0.5, 0.5, 0.5,
-          -0.5, -0.5, -0.5,
-          0.5, -0.5, -0.5,
-          -0.5, -0.5, 0.5,
-          0.5, -0.5, 0.5,
-          -0.5, 0.5, 0.5,
-          0.5, 0.5, 0.5,
-          -0.5, -0.5, 0.5,
-          0.5, -0.5, 0.5,
-          -0.5, 0.5, -0.5,
-          0.5, 0.5, -0.5,
-          -0.5, -0.5, -0.5,
-          0.5, -0.5, -0.5,
-          -0.5, 0.5, 0.5,
-          -0.5, 0.5, -0.5,
-          -0.5, -0.5, 0.5,
-          -0.5, -0.5, -0.5,
-          0.5, 0.5, 0.5,
-          0.5, 0.5, -0.5,
-          0.5, -0.5, 0.5,
-          0.5, -0.5, -0.5};
+          -1, 1, -1,
+          1, 1, -1,
+          -1, 1, 1,
+          1, 1, 1,
+          -1, -1, -1,
+          1, -1, -1,
+          -1, -1, 1,
+          1, -1, 1,
+          -1, 1, 1,
+          1, 1, 1,
+          -1, -1, 1,
+          1, -1, 1,
+          -1, 1, -1,
+          1, 1, -1,
+          -1, -1, -1,
+          1, -1, -1,
+          -1, 1, 1,
+          -1, 1, -1,
+          -1, -1, 1,
+          -1, -1, -1,
+          1, 1, 1,
+          1, 1, -1,
+          1, -1, 1,
+          1, -1, -1};
+
+      GLfloat normals[] = {
+          -1.0f, 0.0f, 0.0f, // Left Side
+          0.0f, 0.0f, -1.0f, // Back Side
+          0.0f, -1.0f, 0.0f, // Bottom Side
+          0.0f, 0.0f, -1.0f, // Back Side
+          -1.0f, 0.0f, 0.0f, // Left Side
+          0.0f, -1.0f, 0.0f, // Bottom Side
+          0.0f, 0.0f, 1.0f,  // front Side
+          1.0f, 0.0f, 0.0f,  // right Side
+          1.0f, 0.0f, 0.0f,  // right Side
+          0.0f, 1.0f, 0.0f,  // top Side
+          0.0f, 1.0f, 0.0f,  // top Side
+          0.0f, 0.0f, 1.0f,  // front Side
+
+      };
 
       glGenVertexArrays(numVAOs, vao);
       glBindVertexArray(vao[0]);
@@ -108,6 +124,10 @@ void Mesh::SetBuffers()
       glGenBuffers(numEBOs, ebo);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+
+      glGenBuffers(numNBOs, nbo);
+      glBindBuffer(GL_ARRAY_BUFFER, nbo[0]);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
 
       glGenBuffers(numVBOs, vbo);
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -126,9 +146,11 @@ void Mesh::SetShader()
       shader->CreateRenderingProgram();
       uniformModelMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "model_mat");
       uniformProjectionMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "projection_mat");
-      if (uniformModelMatLocation == -1 || uniformProjectionMatLocation == -1)
+      uniformLightPosLocation = glGetUniformLocation(shader->GetRenderingProgram(), "lightPos");
+      uniformLightColorLocation = glGetUniformLocation(shader->GetRenderingProgram(), "lightColor");
+      if (uniformModelMatLocation == -1 || uniformProjectionMatLocation == -1 || uniformLightPosLocation == -1 || uniformLightColorLocation == -1)
       {
-            std::cout << "Uniforms not located." << std::endl;
+            std::cout << "Uniform(s) not located." << std::endl;
       }
 }
 
@@ -136,7 +158,7 @@ void Mesh::UpdateMesh()
 {
 }
 
-void Mesh::RenderMesh(glm::mat4 projMat)
+void Mesh::RenderMesh(glm::mat4 projMat, std::vector<Light *> lights)
 {
       glUseProgram(shader->GetRenderingProgram());
 
@@ -145,6 +167,11 @@ void Mesh::RenderMesh(glm::mat4 projMat)
 
       glUniformMatrix4fv(uniformModelMatLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
       glUniformMatrix4fv(uniformProjectionMatLocation, 1, GL_FALSE, glm::value_ptr(projMat));
+      for (auto light : lights)
+      {
+            glUniform3f(uniformLightPosLocation, light->GetLightPos()[0], light->GetLightPos()[1], light->GetLightPos()[2]);
+            glUniform3f(uniformLightColorLocation, light->GetLightColor()[0], light->GetLightColor()[1], light->GetLightColor()[2]);
+      }
 
       glBindVertexArray(vao[0]);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
