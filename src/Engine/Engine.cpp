@@ -51,6 +51,7 @@ void Engine::Init()
       glEnable(GL_DEPTH_TEST);
 
       // set buffers for meshes
+      meshes.push_back(new Mesh());
       for (auto mesh : meshes)
       {
             mesh->SetBuffers();
@@ -101,6 +102,11 @@ void Engine::Render()
 
 void Engine::Destroy()
 {
+      for (auto mesh : meshes)
+      {
+            mesh->DestroyMesh();
+            mesh = nullptr;
+      }
       glfwDestroyWindow(window);
       glfwTerminate();
 }
