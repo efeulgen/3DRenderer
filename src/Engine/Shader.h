@@ -22,6 +22,8 @@ public:
 
       GLuint CreateShader(const char *shaderSrc, GLenum shaderType);
       void CreateRenderingProgram();
+
+      // getters & setters
       GLuint GetRenderingProgram() { return renderingProgram; }
 };
 

@@ -77,30 +77,30 @@ void Mesh::SetBuffers()
           22, 23, 21};
 
       GLfloat cubeVertices[] = {
-          -1, 1, -1,
-          1, 1, -1,
-          -1, 1, 1,
-          1, 1, 1,
-          -1, -1, -1,
-          1, -1, -1,
-          -1, -1, 1,
-          1, -1, 1,
-          -1, 1, 1,
-          1, 1, 1,
-          -1, -1, 1,
-          1, -1, 1,
-          -1, 1, -1,
-          1, 1, -1,
-          -1, -1, -1,
-          1, -1, -1,
-          -1, 1, 1,
-          -1, 1, -1,
-          -1, -1, 1,
-          -1, -1, -1,
-          1, 1, 1,
-          1, 1, -1,
-          1, -1, 1,
-          1, -1, -1};
+          -0.5, 0.5, -0.5,
+          0.5, 0.5, -0.5,
+          -0.5, 0.5, 0.5,
+          0.5, 0.5, 0.5,
+          -0.5, -0.5, -0.5,
+          0.5, -0.5, -0.5,
+          -0.5, -0.5, 0.5,
+          0.5, -0.5, 0.5,
+          -0.5, 0.5, 0.5,
+          0.5, 0.5, 0.5,
+          -0.5, -0.5, 0.5,
+          0.5, -0.5, 0.5,
+          -0.5, 0.5, -0.5,
+          0.5, 0.5, -0.5,
+          -0.5, -0.5, -0.5,
+          0.5, -0.5, -0.5,
+          -0.5, 0.5, 0.5,
+          -0.5, 0.5, -0.5,
+          -0.5, -0.5, 0.5,
+          -0.5, -0.5, -0.5,
+          0.5, 0.5, 0.5,
+          0.5, 0.5, -0.5,
+          0.5, -0.5, 0.5,
+          0.5, -0.5, -0.5};
 
       glGenVertexArrays(numVAOs, vao);
       glBindVertexArray(vao[0]);
@@ -118,18 +118,34 @@ void Mesh::SetBuffers()
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindVertexArray(0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
+void Mesh::SetShader()
+{
       shader = new Shader();
       shader->CreateRenderingProgram();
+      uniformModelMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "model_mat");
+      uniformProjectionMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "projection_mat");
+      if (uniformModelMatLocation == -1 || uniformProjectionMatLocation == -1)
+      {
+            std::cout << "Uniforms not located." << std::endl;
+      }
 }
 
 void Mesh::UpdateMesh()
 {
 }
 
-void Mesh::RenderMesh()
+void Mesh::RenderMesh(glm::mat4 projMat)
 {
       glUseProgram(shader->GetRenderingProgram());
+
+      glm::mat4 modelMat(1.0f);
+      modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, -5.0f));
+
+      glUniformMatrix4fv(uniformModelMatLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
+      glUniformMatrix4fv(uniformProjectionMatLocation, 1, GL_FALSE, glm::value_ptr(projMat));
+
       glBindVertexArray(vao[0]);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
       glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);

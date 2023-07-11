@@ -8,8 +8,10 @@ Shader::Shader()
       vShaderSrc =
           "#version 330 \n"
           "layout (location = 0) in vec3 pos; \n"
+          "uniform mat4 model_mat; \n"
+          "uniform mat4 projection_mat; \n"
           "void main() \n"
-          "{ gl_Position = vec4(pos, 1.0); }";
+          "{ gl_Position = projection_mat * model_mat * vec4(pos, 1.0); }";
 
       fShaderSrc =
           "#version 330 \n"

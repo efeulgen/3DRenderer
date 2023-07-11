@@ -30,7 +30,7 @@ void Engine::Init()
       glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
       // create window
-      window = glfwCreateWindow(1280, 720, "FFF-3D Renderer v.1", NULL, NULL);
+      window = glfwCreateWindow(1280, 720, "FFF-3D Renderer v.01", NULL, NULL);
       if (!window)
       {
             glfwTerminate();
@@ -45,26 +45,34 @@ void Engine::Init()
       }
 
       // set framebuffer
-      int frameBufferWidth, frameBufferHeight;
       glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
       glViewport(0, 0, frameBufferWidth, frameBufferHeight);
       glEnable(GL_DEPTH_TEST);
-
-      // set buffers for meshes
-      meshes.push_back(new Mesh());
-      for (auto mesh : meshes)
-      {
-            mesh->SetBuffers();
-      }
 }
 
 void Engine::Display()
 {
+      SetupSceneObjects();
       while (!glfwWindowShouldClose(window))
       {
             ProcessInput();
             Update();
             Render();
+      }
+}
+
+void Engine::SetupSceneObjects()
+{
+      // cameras
+      cameras.push_back(new Camera(frameBufferWidth, frameBufferHeight));
+      activeCamera = cameras[0];
+
+      // meshes
+      meshes.push_back(new Mesh());
+      for (auto mesh : meshes)
+      {
+            mesh->SetBuffers();
+            mesh->SetShader();
       }
 }
 
@@ -87,13 +95,13 @@ void Engine::Update()
 
 void Engine::Render()
 {
-      glClearColor(0.1f, 0.1f, 0.15f, 1.f);
+      glClearColor(0.1f, 0.1f, 0.11f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // render objects
       for (auto mesh : meshes)
       {
-            mesh->RenderMesh();
+            mesh->RenderMesh(activeCamera->GetProjectionMatrix());
       }
 
       glfwSwapBuffers(window);
