@@ -68,7 +68,7 @@ void Engine::SetupSceneObjects()
       activeCamera = cameras[0];
 
       // meshes
-      meshes.push_back(new Mesh());
+      meshes.push_back(new Mesh(glm::vec3(0.0f, 0.0f, -5.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f)));
       for (auto mesh : meshes)
       {
             mesh->SetBuffers();
@@ -85,6 +85,7 @@ void Engine::ProcessInput()
       {
             glfwSetWindowShouldClose(window, GL_TRUE);
       }
+      activeCamera->ProcessCameraInput(window);
 }
 
 void Engine::Update()
@@ -94,6 +95,7 @@ void Engine::Update()
       {
             mesh->UpdateMesh();
       }
+      activeCamera->UpdateCamera();
 }
 
 void Engine::Render()

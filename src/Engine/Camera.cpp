@@ -13,10 +13,28 @@ Camera::~Camera()
       std::cout << "Camera Destructor" << std::endl;
 }
 
-void Camera::ProcessCameraInput()
+void Camera::ProcessCameraInput(GLFWwindow *window)
 {
+      if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      {
+            transform.position -= glm::vec3(0.0f, 0.0f, 0.2f);
+      }
+      if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+      {
+            transform.position += glm::vec3(0.0f, 0.0f, 0.2f);
+      }
+      if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      {
+            transform.position += glm::vec3(0.2f, 0.0f, 0.0f);
+      }
+      if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+      {
+            transform.position -= glm::vec3(0.2f, 0.0f, 0.0f);
+      }
 }
 
 void Camera::UpdateCamera()
 {
+      viewMat = glm::mat4(1.0f);
+      viewMat = glm::translate(viewMat, transform.position);
 }

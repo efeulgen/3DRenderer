@@ -12,18 +12,12 @@
 #include "Shader.h"
 #include "Light.h"
 #include "Camera.h"
+#include "Components/TransformComponent.h"
 
 #define numVAOs 1
 #define numVBOs 1
 #define numEBOs 1
 #define numNBOs 1
-
-struct Transform
-{
-      glm::vec3 position{glm::vec3{0.0f, 0.0f, 0.0f}};
-      float rotation{0.0};
-      glm::vec3 scale{glm::vec3{0.0f, 0.0f, 0.0f}};
-};
 
 class Mesh
 {
@@ -35,6 +29,7 @@ private:
       GLuint nbo[numNBOs];
 
       GLuint uniformModelMatLocation;
+      GLuint uniformViewMatLocation;
       GLuint uniformProjectionMatLocation;
       GLuint uniformLightPosLocation;
       GLuint uniformLightColorLocation;
@@ -45,7 +40,7 @@ private:
       Transform transform;
 
 public:
-      Mesh();
+      Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale);
       Mesh(GLfloat *v, unsigned int *i);
       ~Mesh();
 

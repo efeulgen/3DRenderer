@@ -1,7 +1,7 @@
 
 #include "Mesh.h"
 
-Mesh::Mesh()
+Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale)
 {
       std::cout << "Mesh Constructor" << std::endl;
       unsigned int indexArray[] = {
@@ -46,6 +46,11 @@ Mesh::Mesh()
 
       indices = indexArray;
       vertices = vertexArray;
+
+      transform.position = pos;
+      transform.rotation.angle = angle;
+      transform.rotation.axis = axis;
+      transform.scale = scale;
 }
 
 Mesh::Mesh(GLfloat *v, unsigned int *i) : vertices{v}, indices{i}
@@ -125,17 +130,17 @@ void Mesh::SetBuffers()
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
 
-      glGenBuffers(numNBOs, nbo);
-      glBindBuffer(GL_ARRAY_BUFFER, nbo[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glEnableVertexAttribArray(1);
-
       glGenBuffers(numVBOs, vbo);
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
       glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
       glEnableVertexAttribArray(0);
+
+      glGenBuffers(numNBOs, nbo);
+      glBindBuffer(GL_ARRAY_BUFFER, nbo[0]);
+      glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(1);
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindVertexArray(0);
@@ -147,10 +152,11 @@ void Mesh::SetShader()
       shader = new Shader();
       shader->CreateRenderingProgram();
       uniformModelMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "model_mat");
+      uniformViewMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "view_mat");
       uniformProjectionMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "projection_mat");
       uniformLightPosLocation = glGetUniformLocation(shader->GetRenderingProgram(), "lightPos");
       uniformLightColorLocation = glGetUniformLocation(shader->GetRenderingProgram(), "lightColor");
-      if (uniformModelMatLocation == -1 || uniformProjectionMatLocation == -1 || uniformLightPosLocation == -1 || uniformLightColorLocation == -1)
+      if (uniformModelMatLocation == -1 || uniformViewMatLocation == -1 || uniformProjectionMatLocation == -1 || uniformLightPosLocation == -1 || uniformLightColorLocation == -1)
       {
             std::cout << "Uniform(s) not located." << std::endl;
       }
@@ -164,13 +170,15 @@ void Mesh::RenderMesh(Camera *activeCam, std::vector<Light *> lights)
 {
       glUseProgram(shader->GetRenderingProgram());
 
-      transform.rotation += 1.f; // for debug; delete later
+      transform.rotation.angle += 1.f; // for debugging; delete later
 
       glm::mat4 modelMat(1.0f);
-      modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, -5.0f));
-      modelMat = glm::rotate(modelMat, glm::radians(transform.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+      modelMat = glm::translate(modelMat, transform.position);
+      modelMat = glm::rotate(modelMat, glm::radians(transform.rotation.angle), transform.rotation.axis);
+      modelMat = glm::scale(modelMat, transform.scale);
 
       glUniformMatrix4fv(uniformModelMatLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
+      glUniformMatrix4fv(uniformViewMatLocation, 1, GL_FALSE, glm::value_ptr(activeCam->GetViewMatrix()));
       glUniformMatrix4fv(uniformProjectionMatLocation, 1, GL_FALSE, glm::value_ptr(activeCam->GetProjectionMatrix()));
       for (auto light : lights)
       {

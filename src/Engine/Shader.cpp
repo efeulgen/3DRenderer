@@ -5,21 +5,24 @@ Shader::Shader()
 {
       std::cout << "Shader Constructor" << std::endl;
 
+      // default vertex shader
       vShaderSrc =
           "#version 330 \n"
           "layout (location = 0) in vec3 pos; \n"
           "layout (location = 1) in vec3 v_in_normal; \n"
           "uniform mat4 model_mat; \n"
+          "uniform mat4 view_mat; \n"
           "uniform mat4 projection_mat; \n"
           "out vec3 v_out_normal; \n"
           "out vec3 fragPos; \n"
           "void main() \n"
           "{ \n"
-          "gl_Position = projection_mat * model_mat * vec4(pos, 1.0); \n"
+          "gl_Position = projection_mat * inverse(view_mat) * model_mat * vec4(pos, 1.0); \n"
           "v_out_normal = mat3(transpose(inverse(model_mat))) * v_in_normal; \n"
           "fragPos = vec3(model_mat * vec4(pos, 1.0)); \n"
           "}";
 
+      // default fragment shader
       fShaderSrc =
           "#version 330 \n"
           "in vec3 v_out_normal; \n"
