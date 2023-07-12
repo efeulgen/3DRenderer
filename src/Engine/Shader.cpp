@@ -16,8 +16,7 @@ Shader::Shader()
           "void main() \n"
           "{ \n"
           "gl_Position = projection_mat * model_mat * vec4(pos, 1.0); \n"
-          "//v_out_normal = mat3(transpose(inverse(model_mat))) * v_in_normal; \n"
-          "v_out_normal = v_in_normal; \n"
+          "v_out_normal = mat3(transpose(inverse(model_mat))) * v_in_normal; \n"
           "fragPos = vec3(model_mat * vec4(pos, 1.0)); \n"
           "}";
 

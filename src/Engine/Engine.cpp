@@ -104,7 +104,7 @@ void Engine::Render()
       // render objects
       for (auto mesh : meshes)
       {
-            mesh->RenderMesh(activeCamera->GetProjectionMatrix(), lights);
+            mesh->RenderMesh(activeCamera, lights);
       }
 
       glfwSwapBuffers(window);

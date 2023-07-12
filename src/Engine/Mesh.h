@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 #include "Light.h"
+#include "Camera.h"
 
 #define numVAOs 1
 #define numVBOs 1
@@ -20,7 +21,7 @@
 struct Transform
 {
       glm::vec3 position{glm::vec3{0.0f, 0.0f, 0.0f}};
-      double rotation{0.0};
+      float rotation{0.0};
       glm::vec3 scale{glm::vec3{0.0f, 0.0f, 0.0f}};
 };
 
@@ -51,7 +52,7 @@ public:
       void SetBuffers();
       void SetShader();
       void UpdateMesh();
-      void RenderMesh(glm::mat4 projMat, std::vector<Light *> lights);
+      void RenderMesh(Camera *activeCam, std::vector<Light *> lights);
       void DestroyMesh();
 
       // getters & setters

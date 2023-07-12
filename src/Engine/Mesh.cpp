@@ -128,6 +128,8 @@ void Mesh::SetBuffers()
       glGenBuffers(numNBOs, nbo);
       glBindBuffer(GL_ARRAY_BUFFER, nbo[0]);
       glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(1);
 
       glGenBuffers(numVBOs, vbo);
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -158,15 +160,18 @@ void Mesh::UpdateMesh()
 {
 }
 
-void Mesh::RenderMesh(glm::mat4 projMat, std::vector<Light *> lights)
+void Mesh::RenderMesh(Camera *activeCam, std::vector<Light *> lights)
 {
       glUseProgram(shader->GetRenderingProgram());
 
+      transform.rotation += 1.f; // for debug; delete later
+
       glm::mat4 modelMat(1.0f);
       modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, -5.0f));
+      modelMat = glm::rotate(modelMat, glm::radians(transform.rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 
       glUniformMatrix4fv(uniformModelMatLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
-      glUniformMatrix4fv(uniformProjectionMatLocation, 1, GL_FALSE, glm::value_ptr(projMat));
+      glUniformMatrix4fv(uniformProjectionMatLocation, 1, GL_FALSE, glm::value_ptr(activeCam->GetProjectionMatrix()));
       for (auto light : lights)
       {
             glUniform3f(uniformLightPosLocation, light->GetLightPos()[0], light->GetLightPos()[1], light->GetLightPos()[2]);
