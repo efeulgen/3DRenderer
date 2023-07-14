@@ -10,6 +10,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Managers/InputManager.h"
 
 class Engine
 {
@@ -25,6 +26,9 @@ private:
       std::vector<Camera *> cameras;
       std::vector<Light *> lights;
       Camera *activeCamera = nullptr;
+
+      // managers
+      InputManager *inputManager;
 
 public:
       Engine();

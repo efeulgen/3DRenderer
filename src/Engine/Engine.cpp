@@ -44,10 +44,13 @@ void Engine::Init()
             exit(EXIT_FAILURE);
       }
 
-      // set framebuffer
+      // set viewport
       glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
       glViewport(0, 0, frameBufferWidth, frameBufferHeight);
-      glEnable(GL_DEPTH_TEST);
+
+      glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+      glEnable(GL_DEPTH_TEST); // | GL_ALPHA_TEST
 }
 
 void Engine::Display()
@@ -63,6 +66,9 @@ void Engine::Display()
 
 void Engine::SetupSceneObjects()
 {
+      // manager
+      inputManager = new InputManager(window);
+
       // cameras
       cameras.push_back(new Camera(frameBufferWidth, frameBufferHeight));
       activeCamera = cameras[0];
@@ -95,7 +101,7 @@ void Engine::Update()
       {
             mesh->UpdateMesh();
       }
-      activeCamera->UpdateCamera();
+      activeCamera->UpdateCamera(inputManager->GetCursorChange());
 }
 
 void Engine::Render()

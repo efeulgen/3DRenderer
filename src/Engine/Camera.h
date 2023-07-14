@@ -19,12 +19,21 @@ private:
 
       Transform transform;
 
+      glm::vec3 frontVector = glm::vec3(0.0f, 0.0f, -1.0f);
+      glm::vec3 rightVector;
+      glm::vec3 upVector;
+
+      GLfloat yaw = -90.0f;
+      GLfloat pitch = 0.0f;
+      GLfloat turnSpeed = 0.1f;
+      GLfloat moveSpeed = 0.5f;
+
 public:
       Camera(int frameBufferWidth, int frameBufferHeight);
       ~Camera();
 
       void ProcessCameraInput(GLFWwindow *window);
-      void UpdateCamera();
+      void UpdateCamera(GLfloat *cursorChange);
 
       // getters & setters
       glm::mat4 GetProjectionMatrix() const { return projectionMat; }
