@@ -12,6 +12,7 @@
 #include "Shader.h"
 #include "Light.h"
 #include "Camera.h"
+#include "Texture.h"
 #include "Components/TransformComponent.h"
 
 #define numVAOs 1
@@ -34,13 +35,16 @@ private:
       GLuint uniformLightPosLocation;
       GLuint uniformLightColorLocation;
 
+      GLuint texID;
+      const char *texFilePath;
+
       GLfloat *vertices = nullptr;
       unsigned int *indices = nullptr;
 
       Transform transform;
 
 public:
-      Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale);
+      Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, const char *path = "");
       Mesh(GLfloat *v, unsigned int *i);
       ~Mesh();
 

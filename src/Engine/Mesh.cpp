@@ -1,56 +1,19 @@
 
 #include "Mesh.h"
 
-Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale)
+Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, const char *path)
 {
       std::cout << "Mesh Constructor" << std::endl;
-      unsigned int indexArray[] = {
-          0, 1, 2,
-          2, 3, 1,
-          4, 5, 6,
-          6, 7, 5,
-          8, 9, 10,
-          10, 11, 9,
-          12, 13, 14,
-          14, 15, 13,
-          16, 17, 18,
-          18, 19, 17,
-          20, 21, 22,
-          22, 23, 21};
 
-      GLfloat vertexArray[] = {
-          -1, 1, -1,
-          1, 1, -1,
-          -1, 1, 1,
-          1, 1, 1,
-          -1, -1, -1,
-          1, -1, -1,
-          -1, -1, 1,
-          1, -1, 1,
-          -1, 1, 1,
-          1, 1, 1,
-          -1, -1, 1,
-          1, -1, 1,
-          -1, 1, -1,
-          1, 1, -1,
-          -1, -1, -1,
-          1, -1, -1,
-          -1, 1, 1,
-          -1, 1, -1,
-          -1, -1, 1,
-          -1, -1, -1,
-          1, 1, 1,
-          1, 1, -1,
-          1, -1, 1,
-          1, -1, -1};
-
-      indices = indexArray;
-      vertices = vertexArray;
+      // indices = indexArray;
+      // vertices = vertexArray;
 
       transform.position = pos;
       transform.rotation.angle = angle;
       transform.rotation.axis = axis;
       transform.scale = scale;
+      texFilePath = path;
+      texID = texFilePath ? Texture::CreateTexture(texFilePath) : 0;
 }
 
 Mesh::Mesh(GLfloat *v, unsigned int *i) : vertices{v}, indices{i}
@@ -82,30 +45,30 @@ void Mesh::SetBuffers()
           22, 23, 21};
 
       GLfloat cubeVertices[] = {
-          -1, 1, -1,
-          1, 1, -1,
-          -1, 1, 1,
-          1, 1, 1,
-          -1, -1, -1,
-          1, -1, -1,
-          -1, -1, 1,
-          1, -1, 1,
-          -1, 1, 1,
-          1, 1, 1,
-          -1, -1, 1,
-          1, -1, 1,
-          -1, 1, -1,
-          1, 1, -1,
-          -1, -1, -1,
-          1, -1, -1,
-          -1, 1, 1,
-          -1, 1, -1,
-          -1, -1, 1,
-          -1, -1, -1,
-          1, 1, 1,
-          1, 1, -1,
-          1, -1, 1,
-          1, -1, -1};
+          -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+          1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+          -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+          1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+          -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
+          1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+          -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+          1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+          -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+          1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+          -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+          1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+          -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+          1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+          -1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
+          1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
+          -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+          -1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+          -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+          -1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
+          1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+          1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
+          1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+          1.0f, -1.0f, -1.0f, 1.0f, 1.0f};
 
       GLfloat normals[] = {
           -1.0f, 0.0f, 0.0f, // Left Side
@@ -133,8 +96,10 @@ void Mesh::SetBuffers()
       glGenBuffers(numVBOs, vbo);
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
       glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(cubeVertices[0]) * 5, 0);
+      glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(cubeVertices[0]) * 5, (void *)(sizeof(cubeVertices[0]) * 3));
       glEnableVertexAttribArray(0);
+      glEnableVertexAttribArray(2);
 
       glGenBuffers(numNBOs, nbo);
       glBindBuffer(GL_ARRAY_BUFFER, nbo[0]);
@@ -168,6 +133,11 @@ void Mesh::UpdateMesh()
 
 void Mesh::RenderMesh(Camera *activeCam, std::vector<Light *> lights)
 {
+      if (texFilePath)
+      {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, texID);
+      }
       glUseProgram(shader->GetRenderingProgram());
 
       transform.rotation.angle += 1.f; // for debugging; delete later
