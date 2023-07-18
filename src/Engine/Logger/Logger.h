@@ -3,7 +3,10 @@
 #define LOGGER_H
 
 #include <iostream>
+#include <vector>
 #include <string>
+#include <chrono>
+#include <ctime>
 
 enum LogType
 {
@@ -20,8 +23,9 @@ struct LogEntry
 
 class Logger
 {
+public:
       static std::vector<LogEntry> entries;
-      static void Logg(const std::string &message);
+      static void Log(const std::string &message);
       static void Err(const std::string &message);
 };
 

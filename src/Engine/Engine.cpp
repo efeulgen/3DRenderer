@@ -30,7 +30,9 @@ void Engine::Init()
       glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
       // create window
-      window = glfwCreateWindow(1280, 720, "FFF-3D Renderer v.01", NULL, NULL);
+      GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+      const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+      window = glfwCreateWindow(mode->width, mode->height, "FFF-3D Renderer v.01", monitor, NULL);
       if (!window)
       {
             glfwTerminate();
@@ -66,7 +68,7 @@ void Engine::Display()
 
 void Engine::SetupSceneObjects()
 {
-      // manager
+      // managers
       inputManager = new InputManager(window);
 
       // cameras
