@@ -13,8 +13,8 @@
 class Shader
 {
 private:
-      const char *vShaderSrc;
-      const char *fShaderSrc;
+      const char *vShaderPath;
+      const char *fShaderPath;
 
       GLuint renderingProgram;
 
