@@ -8,6 +8,7 @@
 #include <fstream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include "Logger/Logger.h"
 
 class Shader
@@ -17,6 +18,13 @@ private:
       const char *fShaderPath;
 
       GLuint renderingProgram;
+
+protected:
+      // ******************** to be implemented ********************
+      // glm::vec3 baseColor;
+      // float metallic;
+      // float roughness;
+      // float specular;
 
 public:
       Shader();

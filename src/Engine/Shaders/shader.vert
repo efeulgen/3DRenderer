@@ -7,6 +7,7 @@ layout (location = 2) in vec2 in_uv;
 out vec3 normal;
 out vec2 uv;
 out vec3 fragPos;
+out vec3 viewPos;
 
 uniform mat4 model_mat;
 uniform mat4 view_mat;
@@ -18,4 +19,5 @@ void main() {
       normal = normalize(mat3(transpose(inverse(model_mat))) * in_normal);
       uv = in_uv;
       fragPos = vec3(model_mat * vec4(pos, 1.0));
+      viewPos = vec3(view_mat * vec4(0, 0, 0, 1));
 }

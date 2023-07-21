@@ -140,7 +140,7 @@ void Mesh::RenderMesh(Camera *activeCam, std::vector<Light *> lights)
       }
       glUseProgram(shader->GetRenderingProgram());
 
-      transform.rotation.angle += 1.f; // for debugging; delete later
+      // transform.rotation.angle += 1.f; // for debugging; delete later
 
       glm::mat4 modelMat(1.0f);
       modelMat = glm::translate(modelMat, transform.position);
