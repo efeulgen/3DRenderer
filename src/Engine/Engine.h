@@ -8,8 +8,11 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include "Mesh.h"
+#include "Shaders/Shader.h"
+#include "Shaders/StandardShader.h"
 #include "Camera.h"
-#include "Light.h"
+#include "Lights/Light.h"
+#include "Lights/DirectionalLight.h"
 #include "Managers/InputManager.h"
 
 class Engine
@@ -23,8 +26,9 @@ private:
 
       // scene objects
       std::vector<Mesh *> meshes;
+      std::vector<StandardShader *> shaders; // for debugging : Shader*
       std::vector<Camera *> cameras;
-      std::vector<Light *> lights;
+      std::vector<DirectionalLight *> lights; // for debugging : Light*
       Camera *activeCamera = nullptr;
 
       // managers

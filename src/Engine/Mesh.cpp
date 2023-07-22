@@ -1,7 +1,7 @@
 
 #include "Mesh.h"
 
-Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, const char *path)
+Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, Shader *shdr, const char *path)
 {
       std::cout << "Mesh Constructor" << std::endl;
 
@@ -14,6 +14,7 @@ Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, const ch
       transform.scale = scale;
       texFilePath = path;
       texID = texFilePath ? Texture::CreateTexture(texFilePath) : 0;
+      shader = shdr;
 }
 
 Mesh::Mesh(GLfloat *v, unsigned int *i) : vertices{v}, indices{i}
@@ -112,26 +113,11 @@ void Mesh::SetBuffers()
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Mesh::SetShader()
-{
-      shader = new Shader();
-      shader->CreateRenderingProgram();
-      uniformModelMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "model_mat");
-      uniformViewMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "view_mat");
-      uniformProjectionMatLocation = glGetUniformLocation(shader->GetRenderingProgram(), "projection_mat");
-      uniformLightPosLocation = glGetUniformLocation(shader->GetRenderingProgram(), "lightPos");
-      uniformLightColorLocation = glGetUniformLocation(shader->GetRenderingProgram(), "lightColor");
-      if (uniformModelMatLocation == -1 || uniformViewMatLocation == -1 || uniformProjectionMatLocation == -1 || uniformLightPosLocation == -1 || uniformLightColorLocation == -1)
-      {
-            std::cout << "Uniform(s) not located." << std::endl;
-      }
-}
-
 void Mesh::UpdateMesh()
 {
 }
 
-void Mesh::RenderMesh(Camera *activeCam, std::vector<Light *> lights)
+void Mesh::RenderMesh(Camera *activeCam)
 {
       if (texFilePath)
       {
@@ -147,14 +133,9 @@ void Mesh::RenderMesh(Camera *activeCam, std::vector<Light *> lights)
       modelMat = glm::rotate(modelMat, glm::radians(transform.rotation.angle), transform.rotation.axis);
       modelMat = glm::scale(modelMat, transform.scale);
 
-      glUniformMatrix4fv(uniformModelMatLocation, 1, GL_FALSE, glm::value_ptr(modelMat));
-      glUniformMatrix4fv(uniformViewMatLocation, 1, GL_FALSE, glm::value_ptr(activeCam->GetViewMatrix()));
-      glUniformMatrix4fv(uniformProjectionMatLocation, 1, GL_FALSE, glm::value_ptr(activeCam->GetProjectionMatrix()));
-      for (auto light : lights)
-      {
-            glUniform3f(uniformLightPosLocation, light->GetLightPos()[0], light->GetLightPos()[1], light->GetLightPos()[2]);
-            glUniform3f(uniformLightColorLocation, light->GetLightColor()[0], light->GetLightColor()[1], light->GetLightColor()[2]);
-      }
+      glUniformMatrix4fv(shader->GetUniformLocation("model"), 1, GL_FALSE, glm::value_ptr(modelMat));
+      glUniformMatrix4fv(shader->GetUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(activeCam->GetViewMatrix()));       // should be handled in camera
+      glUniformMatrix4fv(shader->GetUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(activeCam->GetProjectionMatrix())); // should be handled in camera
 
       glBindVertexArray(vao[0]);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);

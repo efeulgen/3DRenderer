@@ -75,16 +75,22 @@ void Engine::SetupSceneObjects()
       cameras.push_back(new Camera(frameBufferWidth, frameBufferHeight));
       activeCamera = cameras[0];
 
+      // shaders
+      shaders.push_back(new StandardShader());
+      for (auto shader : shaders)
+      {
+            shader->CreateRenderingProgram();
+      }
+
       // meshes
-      meshes.push_back(new Mesh(glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), "assets/textures/brick.png"));
+      meshes.push_back(new Mesh(glm::vec3(0.0f, 0.0f, -5.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), shaders[0], "assets/textures/brick.png"));
       for (auto mesh : meshes)
       {
             mesh->SetBuffers();
-            mesh->SetShader();
       }
 
       // lights
-      lights.push_back(new Light());
+      lights.push_back(new DirectionalLight(shaders));
 }
 
 void Engine::ProcessInput()
@@ -111,10 +117,15 @@ void Engine::Render()
       glClearColor(0.1f, 0.1f, 0.11f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      for (auto light : lights)
+      {
+            light->UseLight();
+      }
+
       // render objects
       for (auto mesh : meshes)
       {
-            mesh->RenderMesh(activeCamera, lights);
+            mesh->RenderMesh(activeCamera);
       }
 
       glfwSwapBuffers(window);

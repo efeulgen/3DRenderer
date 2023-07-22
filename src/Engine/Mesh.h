@@ -9,8 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Shader.h"
-#include "Light.h"
+#include "Shaders/Shader.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Components/TransformComponent.h"
@@ -29,12 +28,6 @@ private:
       GLuint ebo[numEBOs];
       GLuint nbo[numNBOs];
 
-      GLuint uniformModelMatLocation;
-      GLuint uniformViewMatLocation;
-      GLuint uniformProjectionMatLocation;
-      GLuint uniformLightPosLocation;
-      GLuint uniformLightColorLocation;
-
       GLuint texID;
       const char *texFilePath;
 
@@ -44,14 +37,13 @@ private:
       Transform transform;
 
 public:
-      Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, const char *path = "");
+      Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, Shader *shdr, const char *path = "");
       Mesh(GLfloat *v, unsigned int *i);
       ~Mesh();
 
       void SetBuffers();
-      void SetShader();
       void UpdateMesh();
-      void RenderMesh(Camera *activeCam, std::vector<Light *> lights);
+      void RenderMesh(Camera *activeCam);
       void DestroyMesh();
 
       // getters & setters
