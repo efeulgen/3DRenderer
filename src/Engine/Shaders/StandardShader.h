@@ -3,32 +3,9 @@
 #define STANDARDSHADER_H
 
 #include <iostream>
+#include <vector>
 #include <GL/glew.h>
 #include "Shader.h"
-
-struct DirectionalLightLocations
-{
-      GLuint uniformDL_direction;
-      GLuint uniformDL_color;
-      GLuint uniformDL_intensity;
-      GLuint uniformAmbientStrength;
-};
-
-struct PointLightLocations
-{
-      GLuint uniformPL_position;
-      GLuint uniformPL_color;
-      GLuint uniformPL_intensity;
-};
-
-struct SpotLightLocations
-{
-      GLuint uniformSL_position;
-      GLuint uniformSL_color;
-      GLuint uniformSL_intensity;
-      GLuint uniformSL_direction;
-      GLuint uniformSL_edge;
-};
 
 const int MAX_POINT_LIGHTS = 20;
 const int MAX_SPOT_LIGHTS = 20;
@@ -46,8 +23,10 @@ private:
       // float specular;
 
       DirectionalLightLocations dl;
-      PointLightLocations pl[MAX_POINT_LIGHTS];
-      SpotLightLocations sl[MAX_SPOT_LIGHTS];
+      // PointLightLocations pl[MAX_POINT_LIGHTS];
+      // SpotLightLocations sl[MAX_SPOT_LIGHTS];
+      std::vector<PointLightLocations> pl;
+      std::vector<SpotLightLocations> sl;
 
 public:
       StandardShader();
@@ -57,9 +36,11 @@ public:
       GLuint GetUniformLocation(const char *name) const override;
       void SetUniformLocations() override;
 
-      DirectionalLightLocations GetDirectionalLightUniformLocations() const;
-      // const PointLightLocations *GetPointLightsLocations() const;
-      // const SpotLightLocations *GetSpotLightsLocations() const;
+      DirectionalLightLocations GetDirectionalLightUniformLocations() const override;
+      // const PointLightLocations *GetPointLightsLocations() const override;
+      // const SpotLightLocations *GetSpotLightsLocations() const override;
+      std::vector<PointLightLocations> GetPointLightsLocations() const override;
+      std::vector<SpotLightLocations> GetSpotLightsLocations() const override;
 };
 
 #endif

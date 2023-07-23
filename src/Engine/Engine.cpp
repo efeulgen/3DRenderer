@@ -91,6 +91,7 @@ void Engine::SetupSceneObjects()
 
       // lights
       lights.push_back(new DirectionalLight(shaders));
+      lights.push_back(new PointLight(shaders, glm::vec3(5.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 1.0f)); // red for debugging purposes
 }
 
 void Engine::ProcessInput()

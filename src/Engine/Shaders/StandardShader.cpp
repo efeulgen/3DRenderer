@@ -8,7 +8,7 @@ StandardShader::StandardShader()
       vShaderPath = "./src/Engine/Shaders/ShaderSrc/StandardShader.vert";
       fShaderPath = "./src/Engine/Shaders/ShaderSrc/StandardShader.frag";
 
-      pointLightCount = 0; // for debugging
+      pointLightCount = 1; // for debugging
       spotLightCount = 0;  // for debugging
 }
 
@@ -20,11 +20,18 @@ StandardShader::~StandardShader()
 GLuint StandardShader::GetUniformLocation(const char *name) const
 {
       if (name == "model")
+      {
             return uniformModelMatLocation;
+      }
       if (name == "view")
+      {
             return uniformViewMatLocation;
+      }
       if (name == "proj")
+      {
             return uniformProjectionMatLocation;
+      }
+      return -1;
 }
 
 void StandardShader::SetUniformLocations()
@@ -42,6 +49,9 @@ void StandardShader::SetUniformLocations()
       // point lights
       for (int i = 0; i < pointLightCount; i++)
       {
+            PointLightLocations newPL;
+            pl.push_back(newPL);
+
             char localBuffer[100] = {"\n"};
 
             snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_position", i);
@@ -80,6 +90,7 @@ DirectionalLightLocations StandardShader::GetDirectionalLightUniformLocations() 
 {
       return dl;
 }
+
 /*
 const PointLightLocations *StandardShader::GetPointLightsLocations() const
 {
@@ -89,5 +100,14 @@ const PointLightLocations *StandardShader::GetPointLightsLocations() const
 const SpotLightLocations *StandardShader::GetSpotLightsLocations() const
 {
       return sl;
+}*/
+
+std::vector<PointLightLocations> StandardShader::GetPointLightsLocations() const
+{
+      return pl;
 }
-*/
+
+std::vector<SpotLightLocations> StandardShader::GetSpotLightsLocations() const
+{
+      return sl;
+}

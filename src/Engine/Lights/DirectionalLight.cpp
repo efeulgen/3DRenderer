@@ -6,7 +6,7 @@ DirectionalLight::DirectionalLight()
       std::cout << "Directional Light Constructor" << std::endl;
 }
 
-DirectionalLight::DirectionalLight(std::vector<StandardShader *> shdrs)
+DirectionalLight::DirectionalLight(std::vector<Shader *> shdrs)
 {
       std::cout << "Directional Light Constructor" << std::endl;
 
@@ -17,7 +17,7 @@ DirectionalLight::DirectionalLight(std::vector<StandardShader *> shdrs)
       ambientStrength = 0.1;
 }
 
-DirectionalLight::DirectionalLight(std::vector<StandardShader *> shdrs, glm::vec3 dir, glm::vec3 col, float dIntensity, float aStrength) : shaders{shdrs}, direction{dir}, color{col}, directionalIntensity{dIntensity}, ambientStrength{aStrength}
+DirectionalLight::DirectionalLight(std::vector<Shader *> shdrs, glm::vec3 dir, glm::vec3 col, float dIntensity, float aStrength) : shaders{shdrs}, direction{dir}, color{col}, directionalIntensity{dIntensity}, ambientStrength{aStrength}
 {
       std::cout << "Directional Light Constructor" << std::endl;
 }

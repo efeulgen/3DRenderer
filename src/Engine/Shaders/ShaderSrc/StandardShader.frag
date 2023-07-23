@@ -34,7 +34,7 @@ struct DirectionalLight{
 struct PointLight{
       vec3 PL_position;
       vec3 PL_color;
-      vec3 PL_intensity;
+      vec3 PL_intensity; // not used ??
 };
 
 struct SpotLight{
@@ -51,7 +51,7 @@ uniform Material mat;
 
 uniform DirectionalLight directionalLight;
 
-uniform int pointLightCount;
+//uniform int pointLightCount;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
 uniform int spotLightCount;
@@ -77,6 +77,7 @@ vec3 CalculateDirectionalLight()
 
 vec3 CalculatePointLights()
 {
+      int pointLightCount = 1; // for debugging
       vec3 outColor = vec3(0.0, 0.0, 0.0);
       for (int i = 0; i < pointLightCount; i++)
       {
@@ -102,7 +103,7 @@ vec3 CalculatePointLights()
 vec3 CalculateSpotLights()
 {
       vec3 outColor = vec3(0.0, 0.0, 0.0);
-      for (int i = 0; i < pointLightCount; i++)
+      for (int i = 0; i < spotLightCount; i++)
       {
             vec3 diffuse = vec3(0, 0, 0);
             vec3  specular = vec3(0, 0, 0);
@@ -136,5 +137,5 @@ vec3 CalculateSpotLights()
 void main() {
       vec4 mainTexture = texture(tex, uv);
       
-      color = mainTexture * vec4(CalculateDirectionalLight(), 1.0);
+      color = mainTexture * vec4(CalculateDirectionalLight() + CalculatePointLights(), 1.0);
 }

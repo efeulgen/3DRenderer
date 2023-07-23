@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Lights/Light.h"
 #include "Lights/DirectionalLight.h"
+#include "Lights/PointLight.h"
 #include "Managers/InputManager.h"
 
 class Engine
@@ -26,9 +27,9 @@ private:
 
       // scene objects
       std::vector<Mesh *> meshes;
-      std::vector<StandardShader *> shaders; // for debugging : Shader*
+      std::vector<Shader *> shaders;
       std::vector<Camera *> cameras;
-      std::vector<DirectionalLight *> lights; // for debugging : Light*
+      std::vector<Light *> lights;
       Camera *activeCamera = nullptr;
 
       // managers

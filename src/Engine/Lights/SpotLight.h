@@ -3,7 +3,7 @@
 #define SPOTLIGHT_H
 
 #include <iostream>
-#include "../Light.h"
+#include "Light.h"
 
 class SpotLight : public Light
 {

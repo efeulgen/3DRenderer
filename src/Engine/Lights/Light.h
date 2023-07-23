@@ -18,7 +18,6 @@ public:
       {
             std::cout << "Light Desturctor" << std::endl;
       }
-
       virtual void UseLight() = 0;
 };
 
