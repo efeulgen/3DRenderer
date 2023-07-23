@@ -139,10 +139,11 @@ public:
       virtual GLuint GetUniformLocation(const char *name) const = 0;
       virtual void SetUniformLocations() = 0;
       virtual void SetPointLightUniformLocations() = 0;
+      virtual void SetSpotLightUniformLocations() = 0;
+      virtual void UpdateLightCounts() = 0;
       virtual DirectionalLightLocations GetDirectionalLightUniformLocations() const = 0;
       virtual std::vector<PointLightLocations> GetPointLightsLocations() const = 0;
       virtual std::vector<SpotLightLocations> GetSpotLightsLocations() const = 0;
-      virtual void UpdateLightCounts() = 0;
 
       void DetroyShader() { delete this; }
 

@@ -31,6 +31,7 @@ public:
       GLuint GetUniformLocation(const char *name) const override;
       void SetUniformLocations() override;
       void SetPointLightUniformLocations() override;
+      void SetSpotLightUniformLocations() override;
       void UpdateLightCounts() override;
 
       DirectionalLightLocations GetDirectionalLightUniformLocations() const override;

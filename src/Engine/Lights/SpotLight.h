@@ -18,10 +18,12 @@ private:
       glm::vec3 direction;
       float edge;
 
+      int spotLightIndex;
+
 public:
       SpotLight();
-      SpotLight(std::vector<Shader *> shdrs);
-      SpotLight(std::vector<Shader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float e);
+      SpotLight(std::vector<Shader *> shdrs, int sLightCount);
+      SpotLight(std::vector<Shader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float e, int sLightCount);
       ~SpotLight();
 
       void UseLight() override;

@@ -68,8 +68,6 @@ void Engine::Display()
 
 void Engine::SetupSceneObjects()
 {
-      //*pointLightCount = 0;
-      //*spotLightCount = 0;
       pointLightCount = 0;
       spotLightCount = 0;
 
@@ -98,6 +96,7 @@ void Engine::SetupSceneObjects()
       lights.push_back(new DirectionalLight(shaders));
       CreateNewPointLight(glm::vec3(5.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 1.0f);
       CreateNewPointLight(glm::vec3(-5.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 1.0f);
+      CreateNewSpotLight(glm::vec3(0.0, 5.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 1.0f, glm::vec3(0.0, -1.0, 0.0), 0.0f); // TODO Debug : edge doesn't work!!
 }
 
 void Engine::ProcessInput()
@@ -157,13 +156,22 @@ void Engine::Destroy()
 
 void Engine::CreateNewPointLight(glm::vec3 pos, glm::vec3 col, float i)
 {
-      //(*pointLightCount) += 1;
       pointLightCount++;
       for (auto shader : shaders)
       {
             shader->IncrementPointLightCount();
             shader->SetPointLightUniformLocations();
-            // shader->UpdateLightCounts();
       }
       lights.push_back(new PointLight(shaders, pos, col, i, pointLightCount));
+}
+
+void Engine::CreateNewSpotLight(glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float edge)
+{
+      spotLightCount++;
+      for (auto shader : shaders)
+      {
+            shader->IncrementSpotLightCount();
+            shader->SetSpotLightUniformLocations();
+      }
+      lights.push_back(new SpotLight(shaders, pos, col, i, dir, edge, spotLightCount));
 }

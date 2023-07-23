@@ -54,25 +54,7 @@ void StandardShader::SetUniformLocations()
       SetPointLightUniformLocations();
 
       // spot lights
-      for (int i = 0; i < spotLightCount; i++)
-      {
-            char localBuffer[100] = {"\n"};
-
-            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_position", i);
-            sl[i].uniformSL_position = glGetUniformLocation(renderingProgram, localBuffer);
-
-            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_color", i);
-            sl[i].uniformSL_color = glGetUniformLocation(renderingProgram, localBuffer);
-
-            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_intensity", i);
-            sl[i].uniformSL_intensity = glGetUniformLocation(renderingProgram, localBuffer);
-
-            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_direction", i);
-            sl[i].uniformSL_direction = glGetUniformLocation(renderingProgram, localBuffer);
-
-            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_edge", i);
-            sl[i].uniformSL_edge = glGetUniformLocation(renderingProgram, localBuffer);
-      }
+      SetSpotLightUniformLocations();
 }
 void StandardShader::SetPointLightUniformLocations()
 {
@@ -95,6 +77,36 @@ void StandardShader::SetPointLightUniformLocations()
 
             snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_intensity", i);
             pl[i].uniformPL_intensity = glGetUniformLocation(renderingProgram, localBuffer);
+      }
+}
+
+void StandardShader::SetSpotLightUniformLocations()
+{
+      if (!sl.empty())
+      {
+            sl.clear();
+      }
+      for (int i = 0; i < spotLightCount; i++)
+      {
+            SpotLightLocations newSL;
+            sl.push_back(newSL);
+
+            char localBuffer[100] = {"\n"};
+
+            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_position", i);
+            sl[i].uniformSL_position = glGetUniformLocation(renderingProgram, localBuffer);
+
+            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_color", i);
+            sl[i].uniformSL_color = glGetUniformLocation(renderingProgram, localBuffer);
+
+            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_intensity", i);
+            sl[i].uniformSL_intensity = glGetUniformLocation(renderingProgram, localBuffer);
+
+            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_direction", i);
+            sl[i].uniformSL_direction = glGetUniformLocation(renderingProgram, localBuffer);
+
+            snprintf(localBuffer, sizeof(localBuffer), "spotLights[%d].SL_edge", i);
+            sl[i].uniformSL_edge = glGetUniformLocation(renderingProgram, localBuffer);
       }
 }
 

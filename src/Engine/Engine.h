@@ -14,6 +14,7 @@
 #include "Lights/Light.h"
 #include "Lights/DirectionalLight.h"
 #include "Lights/PointLight.h"
+#include "Lights/SpotLight.h"
 #include "Managers/InputManager.h"
 
 class Engine
@@ -32,8 +33,6 @@ private:
       std::vector<Light *> lights;
       Camera *activeCamera = nullptr;
 
-      // int *pointLightCount = nullptr;
-      // int *spotLightCount = nullptr;
       int pointLightCount;
       int spotLightCount;
 
@@ -55,7 +54,7 @@ public:
       void Destroy();
 
       void CreateNewPointLight(glm::vec3 pos = glm::vec3(5.0, 0.0, 0.0), glm::vec3 col = glm::vec3(1.0, 1.0, 1.0), float i = 1.0f);
-      void CreateNewSpotLight();
+      void CreateNewSpotLight(glm::vec3 pos = glm::vec3(5.0, 0.0, 0.0), glm::vec3 col = glm::vec3(1.0, 1.0, 1.0), float i = 1.0f, glm::vec3 dir = glm::vec3(0.0, -1.0, 0.0), float edge = 25.0f);
 };
 
 #endif

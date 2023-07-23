@@ -15,6 +15,7 @@ private:
       glm::vec3 position;
       glm::vec3 color;
       float intensity;
+
       int pointLightIndex;
 
 public:

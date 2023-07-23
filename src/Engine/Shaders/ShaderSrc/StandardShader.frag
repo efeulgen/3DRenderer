@@ -136,5 +136,5 @@ vec3 CalculateSpotLights()
 void main() {
       vec4 mainTexture = texture(tex, uv);
       
-      color = mainTexture * vec4(CalculateDirectionalLight() + CalculatePointLights(), 1.0);
+      color = mainTexture * vec4(CalculateDirectionalLight() + CalculatePointLights() + CalculateSpotLights(), 1.0);
 }
