@@ -13,9 +13,6 @@ const int MAX_SPOT_LIGHTS = 20;
 class StandardShader : public Shader
 {
 private:
-      int pointLightCount;
-      int spotLightCount;
-
       // materila properties -> TODO : implement
       // glm::vec3 baseColor;
       // float metallic;
@@ -23,22 +20,20 @@ private:
       // float specular;
 
       DirectionalLightLocations dl;
-      // PointLightLocations pl[MAX_POINT_LIGHTS];
-      // SpotLightLocations sl[MAX_SPOT_LIGHTS];
       std::vector<PointLightLocations> pl;
       std::vector<SpotLightLocations> sl;
 
 public:
-      StandardShader();
+      StandardShader(int pLightCount, int sLightCount);
       ~StandardShader();
 
       // getters & setters
       GLuint GetUniformLocation(const char *name) const override;
       void SetUniformLocations() override;
+      void SetPointLightUniformLocations() override;
+      void UpdateLightCounts() override;
 
       DirectionalLightLocations GetDirectionalLightUniformLocations() const override;
-      // const PointLightLocations *GetPointLightsLocations() const override;
-      // const SpotLightLocations *GetSpotLightsLocations() const override;
       std::vector<PointLightLocations> GetPointLightsLocations() const override;
       std::vector<SpotLightLocations> GetSpotLightsLocations() const override;
 };

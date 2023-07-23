@@ -32,6 +32,11 @@ private:
       std::vector<Light *> lights;
       Camera *activeCamera = nullptr;
 
+      // int *pointLightCount = nullptr;
+      // int *spotLightCount = nullptr;
+      int pointLightCount;
+      int spotLightCount;
+
       // managers
       InputManager *inputManager;
 
@@ -48,6 +53,9 @@ public:
       void Update();
       void Render();
       void Destroy();
+
+      void CreateNewPointLight(glm::vec3 pos = glm::vec3(5.0, 0.0, 0.0), glm::vec3 col = glm::vec3(1.0, 1.0, 1.0), float i = 1.0f);
+      void CreateNewSpotLight();
 };
 
 #endif

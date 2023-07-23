@@ -35,6 +35,10 @@ struct SpotLightLocations
       GLuint uniformSL_edge;
 };
 
+// ************************************************************************************************************************************************************************************
+// ************************************************************************************************************************************************************************************
+// ************************************************************************************************************************************************************************************
+
 class Shader
 {
 protected:
@@ -44,6 +48,12 @@ protected:
       GLuint uniformModelMatLocation;
       GLuint uniformViewMatLocation;
       GLuint uniformProjectionMatLocation;
+
+      int pointLightCount;
+      int spotLightCount;
+
+      GLuint pointLightCountLocation;
+      GLuint spotLightCountLocation;
 
       GLuint renderingProgram;
 
@@ -128,14 +138,19 @@ public:
       // abstract getters & setters
       virtual GLuint GetUniformLocation(const char *name) const = 0;
       virtual void SetUniformLocations() = 0;
+      virtual void SetPointLightUniformLocations() = 0;
       virtual DirectionalLightLocations GetDirectionalLightUniformLocations() const = 0;
-      // virtual const PointLightLocations *GetPointLightsLocations() const = 0;
-      // virtual const SpotLightLocations *GetSpotLightsLocations() const = 0;
       virtual std::vector<PointLightLocations> GetPointLightsLocations() const = 0;
       virtual std::vector<SpotLightLocations> GetSpotLightsLocations() const = 0;
+      virtual void UpdateLightCounts() = 0;
+
+      void DetroyShader() { delete this; }
 
       // getters & setters
       GLuint GetRenderingProgram() const { return renderingProgram; }
+
+      void IncrementPointLightCount() { pointLightCount++; }
+      void IncrementSpotLightCount() { spotLightCount++; }
 };
 
 #endif

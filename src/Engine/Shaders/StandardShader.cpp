@@ -1,15 +1,15 @@
 
 #include "StandardShader.h"
 
-StandardShader::StandardShader()
+StandardShader::StandardShader(int pLightCount, int sLightCount)
 {
       std::cout << "StandardShader Constructor" << std::endl;
 
       vShaderPath = "./src/Engine/Shaders/ShaderSrc/StandardShader.vert";
       fShaderPath = "./src/Engine/Shaders/ShaderSrc/StandardShader.frag";
 
-      pointLightCount = 1; // for debugging
-      spotLightCount = 0;  // for debugging
+      pointLightCount = pLightCount;
+      spotLightCount = sLightCount;
 }
 
 StandardShader::~StandardShader()
@@ -46,23 +46,12 @@ void StandardShader::SetUniformLocations()
       dl.uniformDL_intensity = glGetUniformLocation(renderingProgram, "directionalLight.DL_intensity");
       dl.uniformAmbientStrength = glGetUniformLocation(renderingProgram, "directionalLight.ambientStrength");
 
+      // light counts
+      pointLightCountLocation = glGetUniformLocation(renderingProgram, "pointLightCount");
+      spotLightCountLocation = glGetUniformLocation(renderingProgram, "spotLightCount");
+
       // point lights
-      for (int i = 0; i < pointLightCount; i++)
-      {
-            PointLightLocations newPL;
-            pl.push_back(newPL);
-
-            char localBuffer[100] = {"\n"};
-
-            snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_position", i);
-            pl[i].uniformPL_position = glGetUniformLocation(renderingProgram, localBuffer);
-
-            snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_color", i);
-            pl[i].uniformPL_color = glGetUniformLocation(renderingProgram, localBuffer);
-
-            snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_intensity", i);
-            pl[i].uniformPL_intensity = glGetUniformLocation(renderingProgram, localBuffer);
-      }
+      SetPointLightUniformLocations();
 
       // spot lights
       for (int i = 0; i < spotLightCount; i++)
@@ -85,22 +74,40 @@ void StandardShader::SetUniformLocations()
             sl[i].uniformSL_edge = glGetUniformLocation(renderingProgram, localBuffer);
       }
 }
+void StandardShader::SetPointLightUniformLocations()
+{
+      if (!pl.empty())
+      {
+            pl.clear();
+      }
+      for (int i = 0; i < pointLightCount; i++)
+      {
+            PointLightLocations newPL;
+            pl.push_back(newPL);
+
+            char localBuffer[100] = {"\n"};
+
+            snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_position", i);
+            pl[i].uniformPL_position = glGetUniformLocation(renderingProgram, localBuffer);
+
+            snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_color", i);
+            pl[i].uniformPL_color = glGetUniformLocation(renderingProgram, localBuffer);
+
+            snprintf(localBuffer, sizeof(localBuffer), "pointLights[%d].PL_intensity", i);
+            pl[i].uniformPL_intensity = glGetUniformLocation(renderingProgram, localBuffer);
+      }
+}
+
+void StandardShader::UpdateLightCounts()
+{
+      glUniform1i(pointLightCountLocation, pointLightCount);
+      glUniform1i(spotLightCountLocation, spotLightCount);
+}
 
 DirectionalLightLocations StandardShader::GetDirectionalLightUniformLocations() const
 {
       return dl;
 }
-
-/*
-const PointLightLocations *StandardShader::GetPointLightsLocations() const
-{
-      return pl;
-}
-
-const SpotLightLocations *StandardShader::GetSpotLightsLocations() const
-{
-      return sl;
-}*/
 
 std::vector<PointLightLocations> StandardShader::GetPointLightsLocations() const
 {

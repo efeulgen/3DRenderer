@@ -34,13 +34,13 @@ struct DirectionalLight{
 struct PointLight{
       vec3 PL_position;
       vec3 PL_color;
-      vec3 PL_intensity; // not used ??
+      vec3 PL_intensity; // TODO : implement
 };
 
 struct SpotLight{
       vec3 SL_position;
       vec3 SL_color;
-      vec3 SL_intensity;
+      vec3 SL_intensity; // TODO : implement
       vec3 SL_direction;
       float SL_edge;
 };
@@ -51,7 +51,7 @@ uniform Material mat;
 
 uniform DirectionalLight directionalLight;
 
-//uniform int pointLightCount;
+uniform int pointLightCount;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
 uniform int spotLightCount;
@@ -77,7 +77,6 @@ vec3 CalculateDirectionalLight()
 
 vec3 CalculatePointLights()
 {
-      int pointLightCount = 1; // for debugging
       vec3 outColor = vec3(0.0, 0.0, 0.0);
       for (int i = 0; i < pointLightCount; i++)
       {

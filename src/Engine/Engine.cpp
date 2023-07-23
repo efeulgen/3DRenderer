@@ -68,6 +68,11 @@ void Engine::Display()
 
 void Engine::SetupSceneObjects()
 {
+      //*pointLightCount = 0;
+      //*spotLightCount = 0;
+      pointLightCount = 0;
+      spotLightCount = 0;
+
       // managers
       inputManager = new InputManager(window);
 
@@ -76,7 +81,7 @@ void Engine::SetupSceneObjects()
       activeCamera = cameras[0];
 
       // shaders
-      shaders.push_back(new StandardShader());
+      shaders.push_back(new StandardShader(pointLightCount, spotLightCount));
       for (auto shader : shaders)
       {
             shader->CreateRenderingProgram();
@@ -91,7 +96,8 @@ void Engine::SetupSceneObjects()
 
       // lights
       lights.push_back(new DirectionalLight(shaders));
-      lights.push_back(new PointLight(shaders, glm::vec3(5.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 1.0f)); // red for debugging purposes
+      CreateNewPointLight(glm::vec3(5.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 1.0f);
+      CreateNewPointLight(glm::vec3(-5.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 1.0f);
 }
 
 void Engine::ProcessInput()
@@ -118,6 +124,11 @@ void Engine::Render()
       glClearColor(0.1f, 0.1f, 0.11f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      for (auto shader : shaders)
+      {
+            shader->UpdateLightCounts();
+      }
+
       for (auto light : lights)
       {
             light->UseLight();
@@ -142,4 +153,17 @@ void Engine::Destroy()
       }
       glfwDestroyWindow(window);
       glfwTerminate();
+}
+
+void Engine::CreateNewPointLight(glm::vec3 pos, glm::vec3 col, float i)
+{
+      //(*pointLightCount) += 1;
+      pointLightCount++;
+      for (auto shader : shaders)
+      {
+            shader->IncrementPointLightCount();
+            shader->SetPointLightUniformLocations();
+            // shader->UpdateLightCounts();
+      }
+      lights.push_back(new PointLight(shaders, pos, col, i, pointLightCount));
 }
