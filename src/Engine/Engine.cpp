@@ -86,7 +86,11 @@ void Engine::SetupSceneObjects()
       }
 
       // meshes
-      meshes.push_back(new Mesh(glm::vec3(0.0f, 0.0f, -5.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), shaders[0], "assets/textures/brick.png"));
+      Mesh *newMesh = ImportManager::Import("src/Engine/PrimitiveMeshes/cube.obj");
+      // Mesh *newMesh = ImportManager::Import("src/Engine/PrimitiveMeshes/sphere.obj"); -> TODO : debug
+      // Mesh *newMesh = ImportManager::Import("src/Engine/PrimitiveMeshes/x-wing.obj"); -> TODO : debug
+      newMesh->AssignShader(shaders[0], "assets/textures/brick.png"); // TOOD : pass to Import func.
+      meshes.push_back(newMesh);
       for (auto mesh : meshes)
       {
             mesh->SetBuffers();

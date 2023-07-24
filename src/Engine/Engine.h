@@ -16,6 +16,9 @@
 #include "Lights/PointLight.h"
 #include "Lights/SpotLight.h"
 #include "Managers/InputManager.h"
+#include "Managers/ImportManager.h"
+
+#include "Logger/Logger.h"
 
 class Engine
 {

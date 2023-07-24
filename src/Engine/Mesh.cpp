@@ -6,24 +6,31 @@ Mesh::Mesh()
       std::cout << "Default Mesh Constructor" << std::endl;
 }
 
-Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, Shader *shdr, const char *path)
+Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size)
 {
       std::cout << "Mesh Constructor" << std::endl;
 
-      // indices = indexArray;
-      // vertices = vertexArray;
+      vertices = v;
+      indices = i;
+      numOfVertices = v_size;
+      numOfIndices = i_size;
 
+      transform.position = glm::vec3(0.0, 0.0, 0.0);
+      transform.rotation.angle = 0.0f;
+      transform.rotation.axis = glm::vec3(0.0, 1.0, 0.0);
+      transform.scale = glm::vec3(1.0, 1.0, 1.0);
+}
+
+Mesh::Mesh(GLfloat *v, unsigned int *i, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale)
+{
+      std::cout << "Mesh Constructor" << std::endl;
+
+      vertices = v;
+      indices = i;
       transform.position = pos;
       transform.rotation.angle = angle;
       transform.rotation.axis = axis;
       transform.scale = scale;
-      texFilePath = path;
-      texID = texFilePath ? Texture::CreateTexture(texFilePath) : 0;
-      shader = shdr;
-}
-
-Mesh::Mesh(GLfloat *v, unsigned int *i) : vertices{v}, indices{i}
-{
 }
 
 Mesh::~Mesh()
@@ -36,86 +43,33 @@ Mesh::~Mesh()
 
 void Mesh::SetBuffers()
 {
-      unsigned int cubeIndices[] = {
-          0, 1, 2,
-          2, 3, 1,
-          4, 5, 6,
-          6, 7, 5,
-          8, 9, 10,
-          10, 11, 9,
-          12, 13, 14,
-          14, 15, 13,
-          16, 17, 18,
-          18, 19, 17,
-          20, 21, 22,
-          22, 23, 21};
-
-      GLfloat cubeVertices[] = {
-          -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-          1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-          -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-          1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-          -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-          1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-          -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-          1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-          -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-          1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-          -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-          1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-          -1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
-          1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-          -1.0f, -1.0f, -1.0f, 0.0f, 1.0f,
-          1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-          -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-          -1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-          -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-          -1.0f, -1.0f, -1.0f, 1.0f, 1.0f,
-          1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-          1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
-          1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-          1.0f, -1.0f, -1.0f, 1.0f, 1.0f};
-
-      GLfloat normals[] = {
-          -1.0f, 0.0f, 0.0f, // Left Side
-          0.0f, 0.0f, -1.0f, // Back Side
-          0.0f, -1.0f, 0.0f, // Bottom Side
-          0.0f, 0.0f, -1.0f, // Back Side
-          -1.0f, 0.0f, 0.0f, // Left Side
-          0.0f, -1.0f, 0.0f, // Bottom Side
-          0.0f, 0.0f, 1.0f,  // front Side
-          1.0f, 0.0f, 0.0f,  // right Side
-          1.0f, 0.0f, 0.0f,  // right Side
-          0.0f, 1.0f, 0.0f,  // top Side
-          0.0f, 1.0f, 0.0f,  // top Side
-          0.0f, 0.0f, 1.0f,  // front Side
-
-      };
-
       glGenVertexArrays(numVAOs, vao);
       glBindVertexArray(vao[0]);
 
       glGenBuffers(numEBOs, ebo);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * numOfIndices, indices, GL_STATIC_DRAW);
 
       glGenBuffers(numVBOs, vbo);
       glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(cubeVertices[0]) * 5, 0);
-      glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(cubeVertices[0]) * 5, (void *)(sizeof(cubeVertices[0]) * 3));
+      glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);                                 // vertex pos
+      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void *)(sizeof(vertices[0]) * 5)); // normal
+      glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void *)(sizeof(vertices[0]) * 3)); // uv
       glEnableVertexAttribArray(0);
-      glEnableVertexAttribArray(2);
-
-      glGenBuffers(numNBOs, nbo);
-      glBindBuffer(GL_ARRAY_BUFFER, nbo[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
       glEnableVertexAttribArray(1);
+      glEnableVertexAttribArray(2);
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindVertexArray(0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void Mesh::AssignShader(Shader *shdr, const char *texPath)
+{
+      texFilePath = texPath;
+      texID = texFilePath ? Texture::CreateTexture(texFilePath) : 0;
+      shader = shdr;
 }
 
 void Mesh::UpdateMesh()
@@ -131,7 +85,7 @@ void Mesh::RenderMesh(Camera *activeCam)
       }
       glUseProgram(shader->GetRenderingProgram());
 
-      // transform.rotation.angle += 1.f; // for debugging; delete later
+      transform.rotation.angle += 1.f; // for debugging; delete later
 
       glm::mat4 modelMat(1.0f);
       modelMat = glm::translate(modelMat, transform.position);

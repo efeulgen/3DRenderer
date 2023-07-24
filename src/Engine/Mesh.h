@@ -26,24 +26,25 @@ private:
       GLuint vao[numVAOs];
       GLuint vbo[numVBOs];
       GLuint ebo[numEBOs];
-      GLuint nbo[numNBOs];
 
-      GLuint texID;            // implement in Material
+      GLuint texID = -1;       // implement in Material
       const char *texFilePath; // implement in Material
 
-      GLfloat *vertices = nullptr;
-      unsigned int *indices = nullptr;
-      // GLfloat *normals = nullptr;
+      GLfloat *vertices;
+      unsigned int *indices;
+      unsigned int numOfVertices;
+      unsigned int numOfIndices;
 
       Transform transform;
 
 public:
       Mesh();
-      Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, Shader *shdr, const char *path = "");
-      Mesh(GLfloat *v, unsigned int *i);
+      Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size);
+      Mesh(GLfloat *v, unsigned int *i, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale);
       ~Mesh();
 
       void SetBuffers();
+      void AssignShader(Shader *shdr, const char *texPath = "");
       void UpdateMesh();
       void RenderMesh(Camera *activeCam);
       void DestroyMesh();
