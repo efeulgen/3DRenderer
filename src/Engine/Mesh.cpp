@@ -1,6 +1,11 @@
 
 #include "Mesh.h"
 
+Mesh::Mesh()
+{
+      std::cout << "Default Mesh Constructor" << std::endl;
+}
+
 Mesh::Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, Shader *shdr, const char *path)
 {
       std::cout << "Mesh Constructor" << std::endl;
@@ -119,7 +124,7 @@ void Mesh::UpdateMesh()
 
 void Mesh::RenderMesh(Camera *activeCam)
 {
-      if (texFilePath)
+      if (texFilePath) // implement in Material
       {
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texID);

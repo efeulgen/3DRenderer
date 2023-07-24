@@ -28,15 +28,17 @@ private:
       GLuint ebo[numEBOs];
       GLuint nbo[numNBOs];
 
-      GLuint texID;
-      const char *texFilePath;
+      GLuint texID;            // implement in Material
+      const char *texFilePath; // implement in Material
 
       GLfloat *vertices = nullptr;
       unsigned int *indices = nullptr;
+      // GLfloat *normals = nullptr;
 
       Transform transform;
 
 public:
+      Mesh();
       Mesh(glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale, Shader *shdr, const char *path = "");
       Mesh(GLfloat *v, unsigned int *i);
       ~Mesh();

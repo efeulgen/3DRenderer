@@ -5,7 +5,7 @@ OBJ_NAME = 3Drenderer
 ########################################################################################################################################
 
 build:
-	g++ -Wall -std=c++17 -I"./libs" $(SRC) -lglfw -lGLEW -framework OpenGL -o $(OBJ_NAME)
+	g++ -Wall -std=c++17 -I"./libs" $(SRC) -lglfw -lGLEW -lassimp -framework OpenGL -o $(OBJ_NAME)
 
 run:
 	./$(OBJ_NAME)
