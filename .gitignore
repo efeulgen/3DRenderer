@@ -30,4 +30,10 @@
 *.exe
 *.out
 *.app
+
 /assets
+/src/.vscode
+.DS_Store
+/libs/.DS_Store
+/src/.DS_Store
+/src/Engine/.DS_Store
