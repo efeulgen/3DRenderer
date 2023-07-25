@@ -9,13 +9,14 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "../Mesh.h"
+#include "../Shaders/Shader.h"
 
 #include "../Logger/Logger.h"
 
 class ImportManager
 {
 public:
-      static Mesh *Import(const char *path);
+      static Mesh *Import(const char *path, const char *texPath, std::vector<Mesh *> &meshList, Shader *shader);
 };
 
 #endif

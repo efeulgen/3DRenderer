@@ -86,15 +86,8 @@ void Engine::SetupSceneObjects()
       }
 
       // meshes
-      Mesh *newMesh = ImportManager::Import("src/Engine/PrimitiveMeshes/cube.obj");
-      // Mesh *newMesh = ImportManager::Import("src/Engine/PrimitiveMeshes/sphere.obj"); -> TODO : debug
-      // Mesh *newMesh = ImportManager::Import("src/Engine/PrimitiveMeshes/x-wing.obj"); -> TODO : debug
-      newMesh->AssignShader(shaders[0], "assets/textures/brick.png"); // TOOD : pass to Import func.
-      meshes.push_back(newMesh);
-      for (auto mesh : meshes)
-      {
-            mesh->SetBuffers();
-      }
+      ImportManager::Import("src/Engine/PrimitiveMeshes/torus.obj", "assets/tex/brick.png", meshes, shaders[0]); // TODO : debug; can't load . jpg !!
+      // ImportManager::Import("assets/geo/x-wing.obj"); // TODO : debug
 
       // lights
       lights.push_back(new DirectionalLight(shaders));

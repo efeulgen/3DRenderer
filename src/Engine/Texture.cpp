@@ -18,7 +18,7 @@ GLuint Texture::CreateTexture(const char *filePath)
       unsigned char *textureData = stbi_load(filePath, &width, &height, &bitDepth, 0);
       if (!textureData)
       {
-            std::cout << "Error loading texture." << std::endl;
+            Logger::Err("Error loading texture.");
       }
 
       glGenTextures(1, &textureID);

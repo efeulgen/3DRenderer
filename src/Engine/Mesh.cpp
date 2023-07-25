@@ -21,12 +21,15 @@ Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size)
       transform.scale = glm::vec3(1.0, 1.0, 1.0);
 }
 
-Mesh::Mesh(GLfloat *v, unsigned int *i, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale)
+Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale)
 {
       std::cout << "Mesh Constructor" << std::endl;
 
       vertices = v;
       indices = i;
+      numOfVertices = v_size;
+      numOfIndices = i_size;
+
       transform.position = pos;
       transform.rotation.angle = angle;
       transform.rotation.axis = axis;
@@ -98,7 +101,7 @@ void Mesh::RenderMesh(Camera *activeCam)
 
       glBindVertexArray(vao[0]);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
-      glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+      glDrawElements(GL_TRIANGLES, numOfIndices, GL_UNSIGNED_INT, 0);
 }
 
 void Mesh::DestroyMesh()

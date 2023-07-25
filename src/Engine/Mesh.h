@@ -14,6 +14,8 @@
 #include "Texture.h"
 #include "Components/TransformComponent.h"
 
+#include "Logger/Logger.h"
+
 #define numVAOs 1
 #define numVBOs 1
 #define numEBOs 1
@@ -27,8 +29,8 @@ private:
       GLuint vbo[numVBOs];
       GLuint ebo[numEBOs];
 
-      GLuint texID = -1;       // implement in Material
-      const char *texFilePath; // implement in Material
+      GLuint texID = -1;            // implement in Material
+      const char *texFilePath = ""; // implement in Material
 
       GLfloat *vertices;
       unsigned int *indices;
@@ -40,7 +42,7 @@ private:
 public:
       Mesh();
       Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size);
-      Mesh(GLfloat *v, unsigned int *i, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale);
+      Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale);
       ~Mesh();
 
       void SetBuffers();

@@ -19,15 +19,16 @@ StandardShader::~StandardShader()
 
 GLuint StandardShader::GetUniformLocation(const char *name) const
 {
-      if (name == "model")
+      std::string nameStr(name);
+      if (nameStr == "model")
       {
             return uniformModelMatLocation;
       }
-      if (name == "view")
+      if (nameStr == "view")
       {
             return uniformViewMatLocation;
       }
-      if (name == "proj")
+      if (nameStr == "proj")
       {
             return uniformProjectionMatLocation;
       }

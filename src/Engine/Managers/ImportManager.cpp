@@ -52,13 +52,13 @@ std::vector<unsigned int> LoadIndices(aiNode *node, const aiScene *scene, std::v
       return indices;
 }
 
-Mesh *ImportManager::Import(const char *path)
+Mesh *ImportManager::Import(const char *path, const char *texPath, std::vector<Mesh *> &meshList, Shader *shader)
 {
       Assimp::Importer importer;
       const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
       if (!scene)
       {
-            std::cout << "Scene failed to load." << std::endl;
+            Logger::Err("Scene failed to load.");
       }
 
       std::vector<GLfloat> tempVertices;
@@ -80,5 +80,9 @@ Mesh *ImportManager::Import(const char *path)
             indices[i] = tempIndices[i];
       }
 
-      return new Mesh(vertices, indices, tempVertices.size(), tempIndices.size());
+      Mesh *newMesh = new Mesh(vertices, indices, tempVertices.size(), tempIndices.size());
+      newMesh->AssignShader(shader, texPath);
+      newMesh->SetBuffers();
+      meshList.push_back(newMesh);
+      return newMesh;
 }
