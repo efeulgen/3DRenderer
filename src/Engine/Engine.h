@@ -17,6 +17,8 @@
 #include "Lights/SpotLight.h"
 #include "Managers/InputManager.h"
 #include "Managers/ImportManager.h"
+#include "ShadowMaps/ShadowMap.h"
+#include "ShadowMaps/DirectionalShadowMap.h"
 
 #include "Logger/Logger.h"
 
@@ -34,6 +36,7 @@ private:
       std::vector<Shader *> shaders;
       std::vector<Camera *> cameras;
       std::vector<Light *> lights;
+      std::vector<ShadowMap *> shadowMaps;
       Camera *activeCamera = nullptr;
 
       int pointLightCount;
@@ -53,6 +56,9 @@ public:
       void SetupSceneObjects();
       void ProcessInput();
       void Update();
+      void RenderDirectionalShadowPass();
+      void RenderOmnidirectionalShadowPass();
+      void RenderMainPass();
       void Render();
       void Destroy();
 
