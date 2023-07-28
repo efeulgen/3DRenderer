@@ -83,18 +83,21 @@ void Engine::SetupSceneObjects()
       activeCamera = cameras[0];
 
       // shaders
-      shaders.push_back(new StandardShader(pointLightCount, spotLightCount));
-      for (auto shader : shaders)
+      surfaceShaders.push_back(new StandardShader(pointLightCount, spotLightCount));
+      for (auto shader : surfaceShaders)
       {
             shader->CreateRenderingProgram();
       }
+      directionalShadowShdr = new DirectionalShadowMapShader();
+      directionalShadowShdr->CreateRenderingProgram();
 
       // meshes
-      ImportManager::Import("src/Engine/PrimitiveMeshes/torus.obj", "assets/tex/brick.png", meshes, shaders[0]); // TODO : debug; can't load . jpg !!
+      ImportManager::Import("src/Engine/PrimitiveMeshes/torus.obj", "assets/tex/brick.png", meshes, surfaceShaders[0]);                            // TODO : debug; can't load . jpg !!
+      ImportManager::Import("src/Engine/PrimitiveMeshes/plane.obj", "assets/tex/brick.png", meshes, surfaceShaders[0], glm::vec3(0.0, -2.0, 0.0)); // TODO : debug; can't load . jpg !!
       // ImportManager::Import("assets/geo/x-wing.obj"); // TODO : scale
 
       // lights
-      lights.push_back(new DirectionalLight(shaders));
+      mainDirectionalLight = new DirectionalLight(surfaceShaders);
       CreateNewPointLight(glm::vec3(5.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 1.0f);
       CreateNewPointLight(glm::vec3(-5.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 1.0f);
       CreateNewSpotLight(glm::vec3(0.0, 5.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 1.0f, glm::vec3(0.0, -1.0, 0.0), 0.0f); // TODO Debug : edge doesn't work!!
@@ -137,16 +140,18 @@ void Engine::Update()
 // *************** RENDER *************************************************************************************************************************************************************
 // ************************************************************************************************************************************************************************************
 
-void Engine::RenderDirectionalShadowPass()
+void Engine::RenderDirectionalShadowPass(DirectionalLight *dirLight)
 {
-      // use shader
+      glUseProgram(directionalShadowShdr->GetRenderingProgram());
       glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[0]->GetShadowBuffer());
 
+      glClear(GL_DEPTH_BUFFER_BIT);
       glDrawBuffer(GL_NONE);
+      glUniformMatrix4fv(directionalShadowShdr->GetUniformDirectionalLightTransformLocation(), 1, GL_FALSE, glm::value_ptr(dirLight->GetLightTransform())); // pointer to value_ptr?
 
       for (auto mesh : meshes) // render objects
       {
-            mesh->RenderMesh(activeCamera);
+            mesh->RenderMesh(activeCamera, directionalShadowShdr, mainDirectionalLight, true);
       }
 
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -154,12 +159,20 @@ void Engine::RenderDirectionalShadowPass()
 
 void Engine::RenderOmnidirectionalShadowPass()
 {
-      // TODO : implement
+      // ****************************************
+      // ***** TODO : implement *****************
+      // ****************************************
 }
 
 void Engine::RenderMainPass()
 {
-      for (auto shader : shaders)
+
+      for (auto mesh : meshes) // render objects
+      {
+            mesh->RenderMesh(activeCamera, directionalShadowShdr, mainDirectionalLight, false);
+      }
+
+      for (auto shader : surfaceShaders)
       {
             shader->UpdateLightCounts();
       }
@@ -168,11 +181,6 @@ void Engine::RenderMainPass()
       {
             light->UseLight();
       }
-
-      for (auto mesh : meshes) // render objects
-      {
-            mesh->RenderMesh(activeCamera);
-      }
 }
 
 void Engine::Render()
@@ -180,7 +188,7 @@ void Engine::Render()
       glClearColor(0.1f, 0.1f, 0.11f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      RenderDirectionalShadowPass();
+      RenderDirectionalShadowPass(mainDirectionalLight);
       RenderMainPass();
 
       glfwSwapBuffers(window);
@@ -209,21 +217,21 @@ void Engine::Destroy()
 void Engine::CreateNewPointLight(glm::vec3 pos, glm::vec3 col, float i)
 {
       pointLightCount++;
-      for (auto shader : shaders)
+      for (auto shader : surfaceShaders)
       {
             shader->IncrementPointLightCount();
             shader->SetPointLightUniformLocations();
       }
-      lights.push_back(new PointLight(shaders, pos, col, i, pointLightCount));
+      lights.push_back(new PointLight(surfaceShaders, pos, col, i, pointLightCount));
 }
 
 void Engine::CreateNewSpotLight(glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float edge)
 {
       spotLightCount++;
-      for (auto shader : shaders)
+      for (auto shader : surfaceShaders)
       {
             shader->IncrementSpotLightCount();
             shader->SetSpotLightUniformLocations();
       }
-      lights.push_back(new SpotLight(shaders, pos, col, i, dir, edge, spotLightCount));
+      lights.push_back(new SpotLight(surfaceShaders, pos, col, i, dir, edge, spotLightCount));
 }

@@ -9,7 +9,9 @@
 #include <glm/glm.hpp>
 #include "Mesh.h"
 #include "Shaders/Shader.h"
+#include "Shaders/SurfaceShader.h"
 #include "Shaders/StandardShader.h"
+#include "Shaders/DirectionalShadowMapShader.h"
 #include "Camera.h"
 #include "Lights/Light.h"
 #include "Lights/DirectionalLight.h"
@@ -33,11 +35,13 @@ private:
 
       // scene objects
       std::vector<Mesh *> meshes;
-      std::vector<Shader *> shaders;
+      std::vector<SurfaceShader *> surfaceShaders;
       std::vector<Camera *> cameras;
       std::vector<Light *> lights;
       std::vector<ShadowMap *> shadowMaps;
       Camera *activeCamera = nullptr;
+      DirectionalShadowMapShader *directionalShadowShdr = nullptr;
+      DirectionalLight *mainDirectionalLight = nullptr;
 
       int pointLightCount;
       int spotLightCount;
@@ -56,7 +60,7 @@ public:
       void SetupSceneObjects();
       void ProcessInput();
       void Update();
-      void RenderDirectionalShadowPass();
+      void RenderDirectionalShadowPass(DirectionalLight *dirLight);
       void RenderOmnidirectionalShadowPass();
       void RenderMainPass();
       void Render();

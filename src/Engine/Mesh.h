@@ -10,6 +10,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Shaders/Shader.h"
+#include "Shaders/SurfaceShader.h"
+#include "Shaders/DirectionalShadowMapShader.h"
+#include "Lights/DirectionalLight.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Components/TransformComponent.h"
@@ -24,7 +27,7 @@
 class Mesh
 {
 private:
-      Shader *shader = nullptr;
+      SurfaceShader *shader = nullptr;
       GLuint vao[numVAOs];
       GLuint vbo[numVBOs];
       GLuint ebo[numEBOs];
@@ -46,13 +49,13 @@ public:
       ~Mesh();
 
       void SetBuffers();
-      void AssignShader(Shader *shdr, const char *texPath = "");
+      void AssignShader(SurfaceShader *shdr, const char *texPath = "");
       void UpdateMesh();
-      void RenderMesh(Camera *activeCam);
+      void RenderMesh(Camera *activeCam, DirectionalShadowMapShader *dirShadowShdr, DirectionalLight *dirLight, bool isRenderingShadowPass = false);
       void DestroyMesh();
 
       // getters & setters
-      Shader *GetShader() { return shader; }
+      SurfaceShader *GetShader() { return shader; }
 };
 
 #endif

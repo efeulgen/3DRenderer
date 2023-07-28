@@ -5,7 +5,7 @@ SpotLight::SpotLight()
 {
 }
 
-SpotLight::SpotLight(std::vector<Shader *> shdrs, int sLightCount)
+SpotLight::SpotLight(std::vector<SurfaceShader *> shdrs, int sLightCount)
 {
       shaders = shdrs;
       position = glm::vec3(5.0, 0.0, 0.0);
@@ -17,7 +17,7 @@ SpotLight::SpotLight(std::vector<Shader *> shdrs, int sLightCount)
       spotLightIndex = sLightCount - 1;
 }
 
-SpotLight::SpotLight(std::vector<Shader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float e, int sLightCount)
+SpotLight::SpotLight(std::vector<SurfaceShader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float e, int sLightCount)
 {
       shaders = shdrs;
       position = pos;
@@ -37,6 +37,10 @@ void SpotLight::UseLight()
 {
       for (auto shader : shaders)
       {
+            if (shader->GetShaderType() == ShaderType::ST_ShadowMapShader)
+            {
+                  continue;
+            }
             glUniform3f(shader->GetSpotLightsLocations()[spotLightIndex].uniformSL_position, position[0], position[1], position[2]);
             glUniform3f(shader->GetSpotLightsLocations()[spotLightIndex].uniformSL_color, color[0], color[1], color[2]);
             glUniform1f(shader->GetSpotLightsLocations()[spotLightIndex].uniformSL_intensity, intensity);

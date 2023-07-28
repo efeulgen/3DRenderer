@@ -4,9 +4,11 @@ in vec3 normal;
 in vec2 uv;
 in vec3 fragPos;
 in vec3 viewPos;
+out vec4 directionalLightSpacePos; // for shadows
 
 out vec4 color;
 uniform sampler2D tex;
+uniform sampler2D directionalShadowMap;
 
 // ********************************************************************************************************************************************
 // *************** material properties ********************************************************************************************************
@@ -62,9 +64,44 @@ uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 
 // ********************************************************************************************************************************************
+float CalcDirectionalShadowFactor(DirectionalLight light)
+{
+	vec3 projCoords = directionalLightSpacePos.xyz / directionalLightSpacePos.w;
+	projCoords = (projCoords * 0.5) + 0.5;
+
+	float current = projCoords.z;
+
+	vec3 n = normalize(normal);
+	vec3 lightDir = normalize(directionalLight.DL_direction);
+
+	float bias = max(0.05 * (1.0 - dot(n, lightDir)), 0.0005);
+
+
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(directionalShadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(directionalShadowMap, projCoords.xy + vec2(x,y) * texelSize).r;
+			shadow += current - bias > pcfDepth ? 1.0 : 0.0;
+		}
+	}
+
+	shadow /= 9.0;
+
+	if(projCoords.z > 1.0)
+	{
+		shadow = 0.0;
+	}
+
+	return shadow;
+}
 
 vec3 CalculateDirectionalLight()
 {
+      float shadowFactor = CalcDirectionalShadowFactor(directionalLight);
+
       // ambient term of directional light
       vec3 ambient = directionalLight.DL_color * directionalLight.ambientStrength;
 
@@ -72,7 +109,7 @@ vec3 CalculateDirectionalLight()
       float diffuseFactor = max(dot(normal, directionalLight.DL_direction), 0.0);
       vec3 diffuse = diffuseFactor * directionalLight.DL_color * directionalLight.DL_intensity;
 
-      return diffuse + ambient;
+      return (1.0 - shadowFactor) * diffuse + ambient;
 }
 
 vec3 CalculatePointLights()

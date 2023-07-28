@@ -6,12 +6,12 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "Light.h"
-#include "../Shaders/Shader.h"
+#include "../Shaders/SurfaceShader.h"
 
 class PointLight : public Light
 {
 private:
-      std::vector<Shader *> shaders;
+      std::vector<SurfaceShader *> shaders;
       glm::vec3 position;
       glm::vec3 color;
       float intensity;
@@ -20,8 +20,8 @@ private:
 
 public:
       PointLight();
-      PointLight(std::vector<Shader *> shdrs, int pLightCount);
-      PointLight(std::vector<Shader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, int pLightCount);
+      PointLight(std::vector<SurfaceShader *> shdrs, int pLightCount);
+      PointLight(std::vector<SurfaceShader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, int pLightCount);
       ~PointLight();
 
       void UseLight() override;

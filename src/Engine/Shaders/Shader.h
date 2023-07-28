@@ -11,33 +11,11 @@
 #include <glm/glm.hpp>
 #include "../Logger/Logger.h"
 
-struct DirectionalLightLocations
+enum ShaderType
 {
-      GLuint uniformDL_direction;
-      GLuint uniformDL_color;
-      GLuint uniformDL_intensity;
-      GLuint uniformAmbientStrength;
+      ST_SurfaceShader,
+      ST_ShadowMapShader
 };
-
-struct PointLightLocations
-{
-      GLuint uniformPL_position;
-      GLuint uniformPL_color;
-      GLuint uniformPL_intensity;
-};
-
-struct SpotLightLocations
-{
-      GLuint uniformSL_position;
-      GLuint uniformSL_color;
-      GLuint uniformSL_intensity;
-      GLuint uniformSL_direction;
-      GLuint uniformSL_edge;
-};
-
-// ************************************************************************************************************************************************************************************
-// ************************************************************************************************************************************************************************************
-// ************************************************************************************************************************************************************************************
 
 class Shader
 {
@@ -45,27 +23,12 @@ protected:
       const char *vShaderPath;
       const char *fShaderPath;
 
-      GLuint uniformModelMatLocation;
-      GLuint uniformViewMatLocation;
-      GLuint uniformProjectionMatLocation;
-
-      int pointLightCount;
-      int spotLightCount;
-
-      GLuint pointLightCountLocation;
-      GLuint spotLightCountLocation;
-
       GLuint renderingProgram;
+      ShaderType type;
 
 public:
-      Shader()
-      {
-            std::cout << "Shader Constructor" << std::endl;
-      }
-      virtual ~Shader()
-      {
-            std::cout << "Shader Destructor" << std::endl;
-      }
+      Shader() {}
+      virtual ~Shader() {}
 
       GLuint CreateShader(const char *shaderSrc, GLenum shaderType)
       {
@@ -135,23 +98,13 @@ public:
             SetUniformLocations();
       }
 
-      // abstract getters & setters
-      virtual GLuint GetUniformLocation(const char *name) const = 0;
-      virtual void SetUniformLocations() = 0;
-      virtual void SetPointLightUniformLocations() = 0;
-      virtual void SetSpotLightUniformLocations() = 0;
-      virtual void UpdateLightCounts() = 0;
-      virtual DirectionalLightLocations GetDirectionalLightUniformLocations() const = 0;
-      virtual std::vector<PointLightLocations> GetPointLightsLocations() const = 0;
-      virtual std::vector<SpotLightLocations> GetSpotLightsLocations() const = 0;
-
       void DetroyShader() { delete this; }
+
+      virtual void SetUniformLocations() = 0;
 
       // getters & setters
       GLuint GetRenderingProgram() const { return renderingProgram; }
-
-      void IncrementPointLightCount() { pointLightCount++; }
-      void IncrementSpotLightCount() { spotLightCount++; }
+      ShaderType GetShaderType() { return type; }
 };
 
 #endif

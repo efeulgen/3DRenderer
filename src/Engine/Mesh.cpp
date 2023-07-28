@@ -68,7 +68,7 @@ void Mesh::SetBuffers()
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Mesh::AssignShader(Shader *shdr, const char *texPath)
+void Mesh::AssignShader(SurfaceShader *shdr, const char *texPath)
 {
       texFilePath = texPath;
       texID = texFilePath ? Texture::CreateTexture(texFilePath) : 0;
@@ -79,23 +79,34 @@ void Mesh::UpdateMesh()
 {
 }
 
-void Mesh::RenderMesh(Camera *activeCam)
+void Mesh::RenderMesh(Camera *activeCam, DirectionalShadowMapShader *dirShadowShdr, DirectionalLight *dirLight, bool isRenderingShadowPass)
 {
-      if (texFilePath) // implement in Material
+      if (!isRenderingShadowPass)
       {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texID);
+            if (texFilePath) // implement in Material
+            {
+                  glActiveTexture(GL_TEXTURE0);
+                  glBindTexture(GL_TEXTURE_2D, texID);
+            }
+            glUseProgram(shader->GetRenderingProgram());
       }
-      glUseProgram(shader->GetRenderingProgram());
 
-      transform.rotation.angle += 1.f; // for debugging; delete later
+      // transform.rotation.angle += 1.f; // for debugging; delete later
 
       glm::mat4 modelMat(1.0f);
       modelMat = glm::translate(modelMat, transform.position);
       modelMat = glm::rotate(modelMat, glm::radians(transform.rotation.angle), transform.rotation.axis);
       modelMat = glm::scale(modelMat, transform.scale);
 
-      glUniformMatrix4fv(shader->GetUniformLocation("model"), 1, GL_FALSE, glm::value_ptr(modelMat));
+      if (isRenderingShadowPass)
+      {
+            glUniformMatrix4fv(dirShadowShdr->GetUniformModelMatLocation(), 1, GL_FALSE, glm::value_ptr(modelMat));
+      }
+      else
+      {
+            glUniformMatrix4fv(shader->GetUniformLocation("model"), 1, GL_FALSE, glm::value_ptr(modelMat));
+      }
+      glUniformMatrix4fv(dirShadowShdr->GetUniformDirectionalLightTransformLocation(), 1, GL_FALSE, glm::value_ptr(dirLight->GetLightTransform()));
       glUniformMatrix4fv(shader->GetUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(activeCam->GetViewMatrix()));       // should be handled in camera
       glUniformMatrix4fv(shader->GetUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(activeCam->GetProjectionMatrix())); // should be handled in camera
 

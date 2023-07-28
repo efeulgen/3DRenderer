@@ -5,12 +5,12 @@
 #include <iostream>
 #include <vector>
 #include <GL/glew.h>
-#include "Shader.h"
+#include "SurfaceShader.h"
 
 const int MAX_POINT_LIGHTS = 20;
 const int MAX_SPOT_LIGHTS = 20;
 
-class StandardShader : public Shader
+class StandardShader : public SurfaceShader
 {
 private:
       // materila properties -> TODO : implement

@@ -10,6 +10,8 @@ StandardShader::StandardShader(int pLightCount, int sLightCount)
 
       pointLightCount = pLightCount;
       spotLightCount = sLightCount;
+
+      type = ShaderType::ST_SurfaceShader;
 }
 
 StandardShader::~StandardShader()
