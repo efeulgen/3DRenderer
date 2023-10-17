@@ -3,7 +3,7 @@
 
 InputManager::InputManager(GLFWwindow *window)
 {
-      std::cout << "InputManager Constructor" << std::endl;
+      Logger::Log("InputManager Constructor");
 
       glfwSetWindowUserPointer(window, this);
       glfwSetCursorPosCallback(window, CursorCallback);
@@ -11,7 +11,7 @@ InputManager::InputManager(GLFWwindow *window)
 
 InputManager::~InputManager()
 {
-      std::cout << "InputManager Destructor" << std::endl;
+      Logger::Log("InputManager Destructor");
 }
 
 void InputManager::CursorCallback(GLFWwindow *window, double x, double y)

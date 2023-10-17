@@ -5,16 +5,20 @@
 
 Engine::Engine()
 {
+      Logger::Log("Engine Constructor");
+
       windowWidth = 1280;
       windowHeight = 720;
 }
 
 Engine::Engine(int w, int h) : windowWidth{w}, windowHeight{h}
 {
+      Logger::Log("Engine Constructor");
 }
 
 Engine::~Engine()
 {
+      Logger::Log("Engine Destructor");
 }
 
 void Engine::Init()
@@ -146,7 +150,7 @@ void Engine::RenderDirectionalShadowPass(DirectionalLight *dirLight)
       glBindFramebuffer(GL_FRAMEBUFFER, shadowMaps[0]->GetShadowBuffer());
 
       glClear(GL_DEPTH_BUFFER_BIT);
-      glDrawBuffer(GL_NONE);
+      // glDrawBuffer(GL_NONE);
       glUniformMatrix4fv(directionalShadowShdr->GetUniformDirectionalLightTransformLocation(), 1, GL_FALSE, glm::value_ptr(dirLight->GetLightTransform())); // pointer to value_ptr?
 
       for (auto mesh : meshes) // render objects
@@ -166,7 +170,6 @@ void Engine::RenderOmnidirectionalShadowPass()
 
 void Engine::RenderMainPass()
 {
-
       for (auto mesh : meshes) // render objects
       {
             mesh->RenderMesh(activeCamera, directionalShadowShdr, mainDirectionalLight, false);
@@ -181,6 +184,11 @@ void Engine::RenderMainPass()
       {
             light->UseLight();
       }
+
+      glActiveTexture(GL_TEXTURE1);
+      // glBindTexture(GL_TEXTURE_2D, shadowMaps[0]->GetShadowMap());
+      glUniform1i(surfaceShaders[0]->GetTexLocation(), 0); // texture
+      // glUniform1i(surfaceShaders[0]->GetShadowMapLocation(), 1); // shadow map
 }
 
 void Engine::Render()
@@ -188,8 +196,9 @@ void Engine::Render()
       glClearColor(0.1f, 0.1f, 0.11f, 1.f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      RenderDirectionalShadowPass(mainDirectionalLight);
+      // RenderDirectionalShadowPass(mainDirectionalLight);
       RenderMainPass();
+      CheckOpenGLError();
 
       glfwSwapBuffers(window);
       glfwPollEvents();
@@ -234,4 +243,27 @@ void Engine::CreateNewSpotLight(glm::vec3 pos, glm::vec3 col, float i, glm::vec3
             shader->SetSpotLightUniformLocations();
       }
       lights.push_back(new SpotLight(surfaceShaders, pos, col, i, dir, edge, spotLightCount));
+}
+
+void Engine::CheckOpenGLError()
+{
+      GLenum error;
+      while ((error = glGetError()) != GL_NO_ERROR)
+      {
+            switch (error)
+            {
+            case GL_INVALID_ENUM:
+                  Logger::Err("Invalid Enumeration");
+                  break;
+            case GL_INVALID_VALUE:
+                  Logger::Err("Invalid Value");
+                  break;
+            case GL_INVALID_OPERATION:
+                  Logger::Err("Invalid Operation");
+                  break;
+            default:
+                  Logger::Err("OpenGL Error : ", error);
+                  break;
+            }
+      }
 }

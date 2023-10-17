@@ -3,11 +3,12 @@
 
 PointLight::PointLight()
 {
+      Logger::Log("PointLight Constructor");
 }
 
 PointLight::PointLight(std::vector<SurfaceShader *> shdrs, int pLightCount)
 {
-      std::cout << "PointLight Constructor" << std::endl;
+      Logger::Log("PointLight Constructor");
 
       shaders = shdrs;
       position = glm::vec3(5.0, 5.0, 0.0);
@@ -18,7 +19,7 @@ PointLight::PointLight(std::vector<SurfaceShader *> shdrs, int pLightCount)
 
 PointLight::PointLight(std::vector<SurfaceShader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, int pLightCount)
 {
-      std::cout << "PointLight Constructor" << std::endl;
+      Logger::Log("PointLight Constructor");
 
       shaders = shdrs;
       position = pos;
@@ -26,11 +27,12 @@ PointLight::PointLight(std::vector<SurfaceShader *> shdrs, glm::vec3 pos, glm::v
       intensity = i;
       pointLightIndex = pLightCount - 1;
 
-      std::cout << "pointLightIndex : " << pointLightIndex << std::endl;
+      Logger::Log("PointLight Index : ", pointLightIndex);
 }
 
 PointLight::~PointLight()
 {
+      Logger::Log("PointLight Destructor");
 }
 
 void PointLight::UseLight()

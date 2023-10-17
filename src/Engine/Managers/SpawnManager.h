@@ -3,6 +3,7 @@
 #define SPAWNMANAGER_H
 
 #include <iostream>
+#include "../Logger/Logger.h"
 
 enum PrimitiveType
 {

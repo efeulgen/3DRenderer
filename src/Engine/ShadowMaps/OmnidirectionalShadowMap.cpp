@@ -3,7 +3,7 @@
 
 OmnidirectionalShadowMap::OmnidirectionalShadowMap(int w, int h)
 {
-      std::cout << "OmnidirectionalShadowMap Constructor" << std::endl;
+      Logger::Log("OmnidirectionalShadowMap Constructor");
 
       shadowMapWidth = w;
       shadowMapHeight = h;
@@ -11,7 +11,7 @@ OmnidirectionalShadowMap::OmnidirectionalShadowMap(int w, int h)
 
 OmnidirectionalShadowMap::~OmnidirectionalShadowMap()
 {
-      std::cout << "OmnidirectionalShadowMap Destructor" << std::endl;
+      Logger::Log("OmnidirectionalShadowMap Destructor");
 }
 
 void OmnidirectionalShadowMap::SetBuffers()

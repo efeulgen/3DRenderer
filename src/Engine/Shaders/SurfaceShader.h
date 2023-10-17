@@ -39,6 +39,9 @@ protected:
       GLuint uniformViewMatLocation;
       GLuint uniformProjectionMatLocation;
 
+      GLuint texLocation;
+      GLuint shadowMapLocation;
+
       int pointLightCount;
       int spotLightCount;
 
@@ -61,6 +64,9 @@ public:
 
       void IncrementPointLightCount() { pointLightCount++; }
       void IncrementSpotLightCount() { spotLightCount++; }
+
+      GLuint GetTexLocation() const { return texLocation; }
+      GLuint GetShadowMapLocation() const { return shadowMapLocation; }
 };
 
 #endif

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include "../Logger/Logger.h"
 
 class InputManager
 {

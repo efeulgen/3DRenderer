@@ -3,10 +3,13 @@
 
 SpotLight::SpotLight()
 {
+      Logger::Log("SpotLight Constructor");
 }
 
 SpotLight::SpotLight(std::vector<SurfaceShader *> shdrs, int sLightCount)
 {
+      Logger::Log("SpotLight Constructor");
+
       shaders = shdrs;
       position = glm::vec3(5.0, 0.0, 0.0);
       color = glm::vec3(1.0, 1.0, 1.0);
@@ -19,6 +22,8 @@ SpotLight::SpotLight(std::vector<SurfaceShader *> shdrs, int sLightCount)
 
 SpotLight::SpotLight(std::vector<SurfaceShader *> shdrs, glm::vec3 pos, glm::vec3 col, float i, glm::vec3 dir, float e, int sLightCount)
 {
+      Logger::Log("SpotLight Constructor");
+
       shaders = shdrs;
       position = pos;
       color = col;
@@ -31,6 +36,7 @@ SpotLight::SpotLight(std::vector<SurfaceShader *> shdrs, glm::vec3 pos, glm::vec
 
 SpotLight::~SpotLight()
 {
+      Logger::Log("SpotLight Destructor");
 }
 
 void SpotLight::UseLight()

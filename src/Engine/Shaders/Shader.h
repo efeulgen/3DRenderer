@@ -36,13 +36,19 @@ public:
             glShaderSource(shader, 1, &shaderSrc, NULL);
             glCompileShader(shader);
 
-            GLint result = 0;
-            GLchar eLog[1024] = {0};
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-            if (!result)
+            GLint isCompiled = 0;
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+            if (isCompiled != 1)
             {
-                  glGetShaderInfoLog(shader, sizeof(eLog), NULL, eLog);
-                  printf("Shader compilation fails: %s \n", eLog);
+                  int len = 0;
+                  char *log;
+                  glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
+                  if (len > 0)
+                  {
+                        log = (char *)malloc(len);
+                        glGetShaderInfoLog(shader, len, nullptr, log);
+                        printf("Shader compilation fails: %s \n", log);
+                  }
                   return 0;
             }
 
@@ -86,13 +92,19 @@ public:
             glAttachShader(renderingProgram, fShader);
             glLinkProgram(renderingProgram);
 
-            GLint result = 0;
-            GLchar eLog[1024] = {0};
-            glGetProgramiv(renderingProgram, GL_LINK_STATUS, &result);
-            if (!result)
+            GLint isLinked = 0;
+            glGetProgramiv(renderingProgram, GL_LINK_STATUS, &isLinked);
+            if (isLinked != 1)
             {
-                  glGetProgramInfoLog(renderingProgram, sizeof(eLog), NULL, eLog);
-                  printf("Error linking renderingProgram: %s \n", eLog);
+                  int len = 0;
+                  char *log;
+                  glGetProgramiv(renderingProgram, GL_INFO_LOG_LENGTH, &len);
+                  if (len > 0)
+                  {
+                        log = (char *)malloc(len);
+                        glGetProgramInfoLog(renderingProgram, len, nullptr, log);
+                        printf("Error linking renderingProgram: %s \n", log);
+                  }
             }
 
             SetUniformLocations();

@@ -3,14 +3,14 @@
 
 Camera::Camera(int frameBufferWidth, int frameBufferHeight)
 {
-      std::cout << "Camera Constructor" << std::endl;
+      Logger::Log("Camera Constructor");
 
       projectionMat = glm::perspective(45.0f, (GLfloat)frameBufferWidth / (GLfloat)frameBufferHeight, 0.01f, 1000.0f);
 }
 
 Camera::~Camera()
 {
-      std::cout << "Camera Destructor" << std::endl;
+      Logger::Log("Camera Destructor");
 }
 
 void Camera::ProcessCameraInput(GLFWwindow *window)

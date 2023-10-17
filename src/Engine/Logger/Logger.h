@@ -26,7 +26,10 @@ class Logger
 public:
       static std::vector<LogEntry> entries;
       static void Log(const std::string &message);
+      static void Log(const std::string &message, int num);
+      static void Warn(const std::string &message);
       static void Err(const std::string &message);
+      static void Err(const std::string &message, int num);
 };
 
 #endif

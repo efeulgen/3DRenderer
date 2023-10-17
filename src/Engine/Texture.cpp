@@ -3,12 +3,12 @@
 
 Texture::Texture()
 {
-      std::cout << "Texture Constructor" << std::endl;
+      Logger::Log("Texture Constructor");
 }
 
 Texture::~Texture()
 {
-      std::cout << "Texture Destructor" << std::endl;
+      Logger::Log("Texture Destructor");
 }
 
 GLuint Texture::CreateTexture(const char *filePath)

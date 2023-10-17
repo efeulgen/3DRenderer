@@ -3,14 +3,14 @@
 
 DirectionalLight::DirectionalLight()
 {
-      std::cout << "Directional Light Constructor" << std::endl;
+      Logger::Log("DirectionalLight Constructor");
 
       lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, 0.1f, 100.0f);
 }
 
 DirectionalLight::DirectionalLight(std::vector<SurfaceShader *> shdrs)
 {
-      std::cout << "Directional Light Constructor" << std::endl;
+      Logger::Log("DirectionalLight Constructor");
 
       shaders = shdrs;
       direction = glm::vec3(0.5, -1.0, 0.0);
@@ -23,12 +23,12 @@ DirectionalLight::DirectionalLight(std::vector<SurfaceShader *> shdrs)
 
 DirectionalLight::DirectionalLight(std::vector<SurfaceShader *> shdrs, glm::vec3 dir, glm::vec3 col, float dIntensity, float aStrength) : shaders{shdrs}, direction{dir}, color{col}, directionalIntensity{dIntensity}, ambientStrength{aStrength}
 {
-      std::cout << "Directional Light Constructor" << std::endl;
+      Logger::Log("DirectionalLight Constructor");
 }
 
 DirectionalLight::~DirectionalLight()
 {
-      std::cout << "Directional Light Destructor" << std::endl;
+      Logger::Log("DirectionalLight Destructor");
 }
 
 void DirectionalLight::UseLight()

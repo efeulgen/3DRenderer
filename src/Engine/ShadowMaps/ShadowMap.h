@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <GL/glew.h>
+#include "../Logger/Logger.h"
 
 class ShadowMap
 {

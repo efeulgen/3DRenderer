@@ -3,7 +3,7 @@
 
 StandardShader::StandardShader(int pLightCount, int sLightCount)
 {
-      std::cout << "StandardShader Constructor" << std::endl;
+      Logger::Log("StandardShader Constructor");
 
       vShaderPath = "./src/Engine/Shaders/ShaderSrc/StandardShader.vert";
       fShaderPath = "./src/Engine/Shaders/ShaderSrc/StandardShader.frag";
@@ -16,7 +16,7 @@ StandardShader::StandardShader(int pLightCount, int sLightCount)
 
 StandardShader::~StandardShader()
 {
-      std::cout << "StandardShader Destructor" << std::endl;
+      Logger::Log("StandardShader Destructor");
 }
 
 GLuint StandardShader::GetUniformLocation(const char *name) const
@@ -58,6 +58,10 @@ void StandardShader::SetUniformLocations()
 
       // spot lights
       SetSpotLightUniformLocations();
+
+      // textures
+      texLocation = glGetUniformLocation(renderingProgram, "tex");
+      shadowMapLocation = glGetUniformLocation(renderingProgram, "directionalShadowMap");
 }
 void StandardShader::SetPointLightUniformLocations()
 {

@@ -3,7 +3,7 @@
 
 DirectionalShadowMap::DirectionalShadowMap(int w, int h)
 {
-      std::cout << "DirectionalShadowMap Constructor" << std::endl;
+      Logger::Log("DirectionalShadowMap Constructor");
 
       shadowMapWidth = w;
       shadowMapHeight = h;
@@ -11,7 +11,7 @@ DirectionalShadowMap::DirectionalShadowMap(int w, int h)
 
 DirectionalShadowMap::~DirectionalShadowMap()
 {
-      std::cout << "DirectionalShadowMap Destructor" << std::endl;
+      Logger::Log("DirectionalShadowMap Destructor");
 }
 
 void DirectionalShadowMap::SetBuffers()

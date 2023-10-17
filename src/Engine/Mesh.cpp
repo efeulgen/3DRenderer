@@ -3,12 +3,12 @@
 
 Mesh::Mesh()
 {
-      std::cout << "Default Mesh Constructor" << std::endl;
+      Logger::Log("Mesh Constructor");
 }
 
 Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size)
 {
-      std::cout << "Mesh Constructor" << std::endl;
+      Logger::Log("Mesh Constructor");
 
       vertices = v;
       indices = i;
@@ -23,7 +23,7 @@ Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size)
 
 Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size, glm::vec3 pos, float angle, glm::vec3 axis, glm::vec3 scale)
 {
-      std::cout << "Mesh Constructor" << std::endl;
+      Logger::Log("Mesh Destructor");
 
       vertices = v;
       indices = i;
@@ -38,10 +38,12 @@ Mesh::Mesh(GLfloat *v, unsigned int *i, int v_size, int i_size, glm::vec3 pos, f
 
 Mesh::~Mesh()
 {
+      /*
       if (shader)
       {
             delete shader;
       }
+      */
 }
 
 void Mesh::SetBuffers()

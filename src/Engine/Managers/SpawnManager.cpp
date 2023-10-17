@@ -3,12 +3,12 @@
 
 SpawnManager::SpawnManager()
 {
-      std::cout << "SpawnManager Constructor" << std::endl;
+      Logger::Log("SpawnManager Constructor");
 }
 
 SpawnManager::~SpawnManager()
 {
-      std::cout << "SpawnManager Destructor" << std::endl;
+      Logger::Log("SpawnManager Destructor");
 }
 
 void SpawnManager::SpawnPrimitive(PrimitiveType primType)

@@ -68,6 +68,7 @@ public:
 
       void CreateNewPointLight(glm::vec3 pos = glm::vec3(5.0, 0.0, 0.0), glm::vec3 col = glm::vec3(1.0, 1.0, 1.0), float i = 1.0f);
       void CreateNewSpotLight(glm::vec3 pos = glm::vec3(5.0, 0.0, 0.0), glm::vec3 col = glm::vec3(1.0, 1.0, 1.0), float i = 1.0f, glm::vec3 dir = glm::vec3(0.0, -1.0, 0.0), float edge = 25.0f);
+      void CheckOpenGLError();
 };
 
 #endif
