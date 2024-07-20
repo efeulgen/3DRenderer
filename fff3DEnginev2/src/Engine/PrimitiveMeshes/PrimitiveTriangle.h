@@ -13,6 +13,7 @@ public:
 
       void SetupBuffers() override;
       void RenderMesh() override;
+      void DestroyMesh() override;
 };
 
 #endif

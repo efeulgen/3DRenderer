@@ -12,11 +12,6 @@ MeshManager::MeshManager()
 MeshManager::~MeshManager()
 {
       Logger::Log("MeshManager Destructor");
-
-      delete head;
-      delete last;
-      head = nullptr;
-      last = nullptr;
 }
 
 // *******************************************************************************************************************************************************************************
@@ -104,9 +99,18 @@ void MeshManager::ClearMeshes()
             p->mesh->DestroyMesh();
             p = p->next;
       }
+      p = nullptr;
 
-      delete head;
-      delete last;
+      if (head == last)
+      {
+            delete head;
+      }
+      else
+      {
+            delete head;
+            delete last;
+      }
+
       head = nullptr;
       last = nullptr;
 }

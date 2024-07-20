@@ -37,7 +37,7 @@ public:
       virtual void SetupBuffers();
       virtual void UpdateMesh();
       virtual void RenderMesh();
-      void DestroyMesh();
+      virtual void DestroyMesh();
 
       void Translate();
       void Rotate();

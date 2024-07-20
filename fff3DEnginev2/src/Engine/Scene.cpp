@@ -19,7 +19,8 @@ void Scene::InitScene()
 
       meshManager = new MeshManager();
       meshManager->AddMesh(new PrimitiveTriangle(0, "triangle_01"));
-      // meshManager->AddMesh(new PrimitiveCube(0, "cube_01"));
+      // meshManager->AddMesh(new PrimitiveTriangle(1, "triangle_02"));
+      //  meshManager->AddMesh(new PrimitiveCube(0, "cube_01"));
       meshManager->SetupMeshes();
 }
 

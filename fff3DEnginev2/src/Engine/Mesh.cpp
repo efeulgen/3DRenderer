@@ -47,8 +47,6 @@ void Mesh::SetupBuffers()
 
 void Mesh::UpdateMesh()
 {
-
-      // TODO : implement
 }
 
 void Mesh::RenderMesh()

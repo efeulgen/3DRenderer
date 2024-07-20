@@ -30,8 +30,6 @@ void PrimitiveTriangle::SetupBuffers()
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindVertexArray(0);
-
-      std::cout << "PrimitiveTriangle buffers set." << std::endl;
 }
 
 void PrimitiveTriangle::RenderMesh()
@@ -39,8 +37,9 @@ void PrimitiveTriangle::RenderMesh()
       glUseProgram(renderingProgram);
       glBindVertexArray(vao[0]);
       glDrawArrays(GL_TRIANGLES, 0, 3);
+}
 
-      // *************** for debug ****************************************************************************************************
-      // glPointSize(30.0);
-      // glDrawArrays(GL_POINTS, 0, 1);
+void PrimitiveTriangle::DestroyMesh()
+{
+      std::cout << "Destroy PrimitiveTriangle" << std::endl;
 }
